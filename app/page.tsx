@@ -49,12 +49,12 @@ export default function Page() {
         </div>
         <div className="flex items-center gap-4">
           <SignedOut>
-            <SignInButton mode="modal" forceRedirectUrl="/home">
+            <SignInButton mode="modal" forceRedirectUrl="/onboard">
               <button className="px-5 py-2 rounded-full font-semibold text-sm sm:text-base bg-white text-gray-900 shadow-lg hover:bg-gray-200 transition">
                 로그인
               </button>
             </SignInButton>
-            <SignUpButton mode="modal" forceRedirectUrl="/onboarding">
+            <SignUpButton mode="modal" forceRedirectUrl="/onboard">
               <button className="px-5 py-2 rounded-full font-semibold text-sm sm:text-base bg-white text-gray-900 shadow-lg hover:bg-gray-200 transition">
                 회원가입
               </button>
@@ -83,7 +83,7 @@ export default function Page() {
           className="text-gray-800 max-w-2xl mb-10 text-lg leading-relaxed"
         >
           인기 카페와 맛집, 그리고 숨겨진 스팟까지. <br />
-          대화형 챗봇이 당신의 취향을 이해하고, 딱 맞는 코스를 추천해드려요.
+          AI가 당신의 취향을 이해하고, 딱 맞는 코스를 추천해드려요.
         </motion.p>
 
         <SignedOut>
@@ -109,7 +109,7 @@ export default function Page() {
             <p className="text-lg text-gray-300 mt-6">
               반가워요!{" "}
               <a
-                href="/home"
+                href="/main"
                 className="font-semibold underline hover:text-white"
               >
                 나만의 추천 코스 보러가기 →

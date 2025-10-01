@@ -1,17 +1,31 @@
 "use client";
 
 import { useState } from "react";
-
+import { useRouter } from "next/navigation";
 const options = [
   { id: "date", label: "데이트" },
   { id: "study", label: "카공" },
   { id: "food", label: "음식점" },
   { id: "healing", label: "힐링 장소" },
+  { id: "concert", label: "공연" },
+  { id: "musical", label: "뮤지컬" },
+  { id: "shopping", label: "쇼핑" },
+  { id: "museum", label: "박물관/미술관" },
+  { id: "festival", label: "축제" },
+  { id: "nature", label: "자연/산책" },
+  { id: "nightview", label: "야경" },
+  { id: "activity", label: "액티비티" },
+  { id: "tradition", label: "전통문화" },
+  { id: "cafe", label: "카페 탐방" },
+  { id: "market", label: "시장/플리마켓" },
+  { id: "photo", label: "포토스팟" },
+  { id: "bar", label: "술집/펍" },
+  { id: "sports", label: "스포츠 관람" },
 ];
 
 export default function Onboard() {
   const [selected, setSelected] = useState<string[]>([]);
-
+  const router = useRouter();
   const toggle = (id: string) => {
     setSelected((prev) =>
       prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
@@ -25,7 +39,7 @@ export default function Onboard() {
       body: JSON.stringify({ interests: selected }),
     });
     if (res.ok) {
-      window.location.href = "/home";
+      router.push("/main");
     } else {
       console.error("온보딩 실패");
     }
