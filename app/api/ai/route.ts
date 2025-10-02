@@ -9,7 +9,7 @@ const openai = new OpenAI({
 
 export async function POST() {
   try {
-    const { userId } = await auth(); // ✅ await 제거
+    const { userId } = await auth(); 
     if (!userId) {
       return NextResponse.json({ error: "로그인 필요" }, { status: 401 });
     }

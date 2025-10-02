@@ -99,24 +99,6 @@ export default function Page() {
             </SignUpButton>
           </motion.div>
         </SignedOut>
-
-        <SignedIn>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            <p className="text-lg text-gray-300 mt-6">
-              반가워요!{" "}
-              <a
-                href="/main"
-                className="font-semibold underline hover:text-white"
-              >
-                나만의 추천 코스 보러가기 →
-              </a>
-            </p>
-          </motion.div>
-        </SignedIn>
       </section>
     </main>
   );
