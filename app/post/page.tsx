@@ -21,16 +21,16 @@ export default async function Posts({ searchParams }: Props) {
 
   return (
     <>
-      <div className="bg-green-50 pt-20">
+      <div className="relative flex items-center justify-center h-screen overflow-hidden transition-colors duration-500 bg-gradient-to-b from-sky-100 to-green-200 pt-28">
         <Header />
-        <div className="pb-10 flex flex-col">
-          <div className="flex flex-col gap-5  p-7">
+        <div className="pb-10 flex flex-col w-[80%] h-full mx-auto">
+          <div className="flex flex-col gap-5 ">
             <AddPost />
           </div>
           {posts.length === 0 ? (
             <span className="mt-[10%] text-center">등록된 글이 없습니다.</span>
           ) : (
-            <div className="mt-4 py-2 px-4 bg-green-100 rounded-lg shadow-lg">
+            <div className="mt-24 py-2 px-4 bg-green-100 rounded-lg shadow-lg">
               {posts.map((post: any) => (
                 <Link
                   href={`/post/${post.id}`}

@@ -1,11 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
+import { UserButton } from "@clerk/nextjs";
 
 const headerVariants = {
   on: {
@@ -36,9 +35,8 @@ export default function Header() {
     {
       key: "post",
       href: pathname === "/post" ? "/" : "/post",
-      label: pathname === "/post" ? "메인" : "포스트",
+      label: pathname === "/post" ? "Main" : "Post",
     },
-    { key: "profile", href: "/profile", label: "프로필" },
   ];
 
   return (
@@ -70,12 +68,15 @@ export default function Header() {
           {menuItems.map((item) => (
             <motion.li key={item.key}>
               <Link href={item.href} className="flex flex-row sm:gap-2 gap-1">
-                <p className="hover:colorful transition-colors duration-300">
+                <p className="hover:colorful transition-colors duration-300 pb-2">
                   {item.label}
                 </p>
               </Link>
             </motion.li>
           ))}
+          <motion.li>
+            <UserButton afterSignOutUrl="/" />
+          </motion.li>
         </motion.ul>
       </nav>
     </header>
