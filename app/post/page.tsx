@@ -58,7 +58,11 @@ export default async function Posts({ searchParams }: Props) {
                     <div className="flex flex-col flex-1">
                       <div className="flex gap-2">
                         <p className="text-sm font-semibold">
-                          {post.user.username}
+                          {post.user.username
+                            ? post.user.username
+                            : post.user.fullName ||
+                              post.user.firstName ||
+                              post.user.primaryEmailAddress}
                         </p>
                         <PostDate date={formatTimeAgo(post.created_at)} />
                       </div>

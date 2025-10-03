@@ -12,11 +12,11 @@ import {
   Coffee,
   ShoppingBag,
   Camera,
-  X,
   ChevronRight,
   Clock,
   Users,
   Flame,
+  BookOpenText,
 } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import { guData } from "@/lib/gudata";
@@ -91,7 +91,7 @@ export default function Home() {
               onMouseLeave={() => setHoveredGu(null)}
               className={`w-full flex items-center gap-3 p-3 rounded-xl mb-2 transition-all ${
                 selectedGu?.id === gu.id
-                  ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                  ? "bg-[#DC4BAF] "
                   : hoveredGu === gu.id
                   ? "bg-gray-100"
                   : "hover:bg-gray-50"
@@ -159,9 +159,15 @@ export default function Home() {
                   : "원하는 구를 선택해보세요"}
               </p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <button className="p-3 hover:bg-gray-100 rounded-xl transition-colors">
                 <Heart className="w-6 h-6 text-gray-600" />
+              </button>
+              <button
+                className="pr-3 hover:bg-gray-100 rounded-xl transition-colors"
+                onClick={() => router.push("/post")}
+              >
+                <BookOpenText className="w-6 h-6 text-gray-600" />
               </button>
               <UserButton />
             </div>

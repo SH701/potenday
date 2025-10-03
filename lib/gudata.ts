@@ -94,7 +94,7 @@ export const guData = [
   {
     id: "11230",
     name: "동대문구",
-    color: "#FEFAE0",
+    color: "#cdcdcd",
     hotspot: "경동시장",
     vibe: "전통시장",
     rating: 4.4,

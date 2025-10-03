@@ -12,8 +12,10 @@ datasource db {
 
 model User {
   id        String    @id @default(cuid())
-  clerkId   String    @unique  // Clerk userId를 여기에 저장
+  clerkId   String    @unique  
   photo     String?
+   username  String? 
+  nickname  String?  
   interests Json 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -28,7 +30,7 @@ model Post {
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
   user        User      @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
-  userId      String    // Clerk userId를 직접 저장
+  userId      String    
   comments    Comment[]
 }
 
@@ -38,7 +40,7 @@ model Comment {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   user       User     @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
-  userId     String   // Clerk userId를 직접 저장
+  userId     String  
   post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId     Int
 }
