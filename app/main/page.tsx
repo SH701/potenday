@@ -4,10 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   MapPin,
-  Search,
   Sparkles,
   TrendingUp,
-  Heart,
   Star,
   Coffee,
   ShoppingBag,
@@ -19,8 +17,9 @@ import {
 } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import { guData } from "@/lib/gudata";
+import ChatWidget from "@/components/main/ChatWidget";
+import Sidebar from "@/components/main/Sidebar";
 
-// 아이콘 매핑 객체
 const iconMap: Record<string, any> = {
   Coffee,
   ShoppingBag,
@@ -36,10 +35,7 @@ export default function Home() {
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
-  const filteredGuData = guData.filter((gu) => {
-    const match = gu.name.toLowerCase().includes(search.toLowerCase());
-    return match;
-  });
+
   useEffect(() => {
     if (!selectedGu) return;
 
@@ -53,92 +49,14 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <aside className="fixed left-0 top-0 h-screen w-72 bg-white border-r border-gray-200 flex flex-col z-40">
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-              <MapPin className="w-7 h-7 text-white" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Seoul Spot</h1>
-              <p className="text-xs text-gray-500">당신만의 서울 발견</p>
-            </div>
-          </div>
-
-          <div className="relative">
-            <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="구 검색..."
-              className="w-full pl-10 pr-4 py-3 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
-            />
-          </div>
-        </div>
-
-        <div className="flex-1 overflow-y-auto p-4">
-          <div className="text-xs font-semibold text-gray-500 mb-3 px-2">
-            전체 구 {search && `(${filteredGuData.length})`}
-          </div>
-          {filteredGuData.map((gu) => (
-            <button
-              key={gu.id}
-              onClick={() => setSelectedGu(gu)}
-              onMouseEnter={() => setHoveredGu(gu.id)}
-              onMouseLeave={() => setHoveredGu(null)}
-              className={`w-full flex items-center gap-3 p-3 rounded-xl mb-2 transition-all ${
-                selectedGu?.id === gu.id
-                  ? "bg-[#DC4BAF] "
-                  : hoveredGu === gu.id
-                  ? "bg-gray-100"
-                  : "hover:bg-gray-50"
-              }`}
-            >
-              <div
-                className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold flex-shrink-0 ${
-                  selectedGu?.id === gu.id
-                    ? "bg-white/20 text-white"
-                    : "text-white"
-                }`}
-                style={{
-                  backgroundColor:
-                    selectedGu?.id === gu.id ? "transparent" : gu.color,
-                }}
-              >
-                {gu.name[0]}
-              </div>
-              <div className="flex-1 text-left">
-                <div
-                  className={`font-semibold text-sm ${
-                    selectedGu?.id === gu.id ? "text-white" : "text-gray-900"
-                  }`}
-                >
-                  {gu.name}
-                </div>
-                <div
-                  className={`text-xs ${
-                    selectedGu?.id === gu.id ? "text-white/80" : "text-gray-500"
-                  }`}
-                >
-                  {gu.hotspot}
-                </div>
-              </div>
-              <ChevronRight
-                className={`w-5 h-5 ${
-                  selectedGu?.id === gu.id ? "text-white" : "text-gray-400"
-                }`}
-              />
-            </button>
-          ))}
-        </div>
-
-        <div className="p-4 border-t border-gray-200">
-          <button className="w-full py-3 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-800 transition-colors">
-            내 저장 목록
-          </button>
-        </div>
-      </aside>
+      <Sidebar
+        search={search}
+        setSearch={setSearch}
+        selectedGu={selectedGu}
+        setSelectedGu={setSelectedGu}
+        hoveredGu={hoveredGu}
+        setHoveredGu={setHoveredGu}
+      />
 
       {/* 메인 콘텐츠 */}
       <main className="ml-72 min-h-screen">
@@ -156,20 +74,22 @@ export default function Home() {
                   : "원하는 구를 선택해보세요"}
               </p>
             </div>
-            <div className="flex items-center gap-2">
-              <button className="p-3 hover:bg-gray-100 rounded-xl transition-colors">
-                <Heart className="w-6 h-6 text-gray-600" />
-              </button>
+            <div className="flex items-center">
               <button
-                className="pr-3 hover:bg-gray-100 rounded-xl transition-colors"
+                className="p-3 hover:bg-gray-100 rounded-xl transition-colors"
                 onClick={() => router.push("/post")}
               >
                 <BookOpenText className="w-6 h-6 text-gray-600" />
               </button>
-              <UserButton />
+              <div className="p-3">
+                <UserButton />
+              </div>
             </div>
           </div>
         </header>
+
+        {/* AI 채팅 */}
+        <ChatWidget />
 
         {selectedGu ? (
           <div className="p-12">
