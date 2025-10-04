@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { SignInButton, SignUpButton, SignedOut } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
 import Image from "next/image";
@@ -47,27 +41,22 @@ export default function Page() {
           <MapPin className="w-6 h-6 text-pink-400" />
           <h1 className="text-2xl font-extrabold tracking-wide">SeoulCourse</h1>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 z-50">
           <SignedOut>
-            <SignInButton mode="modal" forceRedirectUrl="/onboard">
+            <SignInButton mode="modal">
               <button className="px-5 py-2 rounded-full font-semibold text-sm sm:text-base bg-white text-gray-900 shadow-lg hover:bg-gray-200 transition">
                 로그인
               </button>
             </SignInButton>
-            <SignUpButton mode="modal" forceRedirectUrl="/onboard">
+            <SignUpButton mode="modal">
               <button className="px-5 py-2 rounded-full font-semibold text-sm sm:text-base bg-white text-gray-900 shadow-lg hover:bg-gray-200 transition">
                 회원가입
               </button>
             </SignUpButton>
           </SignedOut>
-          <SignedIn>
-            <UserButton afterSignOutUrl="/" />
-          </SignedIn>
         </div>
       </header>
-
-      {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center text-center py-32 px-6 relative z-10">
+      <section className="flex flex-col items-center justify-center text-center py-32 px-6 relative z-50">
         <motion.h2
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -76,6 +65,7 @@ export default function Page() {
         >
           서울 속 나만의 하루
         </motion.h2>
+
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -92,7 +82,7 @@ export default function Page() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <SignUpButton mode="modal" forceRedirectUrl="/onboarding">
+            <SignUpButton mode="modal" forceRedirectUrl="/main">
               <button className="px-10 py-4 rounded-full font-semibold text-lg bg-gradient-to-r from-pink-500 via-purple-500 to-blue-600 text-white shadow-lg hover:scale-105 transform transition-transform">
                 지금 시작하기
               </button>

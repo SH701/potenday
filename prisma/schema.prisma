@@ -11,17 +11,17 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(cuid())
-  clerkId   String    @unique  
+  clerkId   String    @id
   photo     String?
   username  String? 
   nickname  String?  
   email String?
-  interests Json 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   posts     Post[]
   comments  Comment[]
+  Like Like[]
+  Star Star[]
 }
 
 model Post {
@@ -33,6 +33,7 @@ model Post {
   user        User      @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
   userId      String    
   comments    Comment[]
+  Like Like[]
 }
 
 model Comment {
@@ -45,3 +46,32 @@ model Comment {
   post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId     Int
 }
+// 게시글 좋아요 
+model Like {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
+  userId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+}
+
+// 추천 장소 저장 
+model Star {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
+  userId    String
+  placeId   String   
+  title     String
+  desc      String?
+  icon      String?  
+  time      String?
+  price     String?
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, placeId]) 
+}
+

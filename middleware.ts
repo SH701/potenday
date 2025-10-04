@@ -2,12 +2,11 @@ import { clerkMiddleware } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 export default clerkMiddleware(async (auth, req) => {
-  const { userId } = await auth(); // 여기서 함수 호출!
+  const { userId } = await auth();
 
   if (userId && req.nextUrl.pathname === "/") {
     return NextResponse.redirect(new URL("/main", req.url));
   }
-
   return NextResponse.next();
 });
 
