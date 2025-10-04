@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   MapPin,
@@ -14,49 +14,45 @@ import {
   Camera,
   ChevronRight,
   Clock,
-  Users,
   Flame,
   BookOpenText,
 } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import { guData } from "@/lib/gudata";
 
+// 아이콘 매핑 객체
+const iconMap: Record<string, any> = {
+  Coffee,
+  ShoppingBag,
+  Camera,
+};
+
 export default function Home() {
   const [selectedGu, setSelectedGu] = useState<(typeof guData)[number] | null>(
     null
   );
-  const [hoveredGu, setHoveredGu] = useState(null);
+  const [hoveredGu, setHoveredGu] = useState<string | null>(null);
   const router = useRouter();
+  const [recommendations, setRecommendations] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+  const filteredGuData = guData.filter((gu) => {
+    const match = gu.name.toLowerCase().includes(search.toLowerCase());
+    return match;
+  });
+  useEffect(() => {
+    if (!selectedGu) return;
 
-  const recommendations = {
-    1: [
-      {
-        icon: Coffee,
-        title: "청담 디저트 카페",
-        desc: "미슐랭 가이드 추천 디저트 맛집",
-        time: "14:00 - 22:00",
-        price: "₩₩₩",
-      },
-      {
-        icon: ShoppingBag,
-        title: "가로수길 편집샵",
-        desc: "국내외 럭셔리 브랜드 편집샵",
-        time: "12:00 - 20:00",
-        price: "₩₩₩₩",
-      },
-      {
-        icon: Camera,
-        title: "압구정 로데오",
-        desc: "SNS 핫플 거리 투어",
-        time: "10:00 - 24:00",
-        price: "₩₩",
-      },
-    ],
-  };
+    setLoading(true);
+    fetch(`/api/recommendations/${selectedGu.id}`)
+      .then((res) => res.json())
+      .then((data) => setRecommendations(data.recommendations || []))
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
+  }, [selectedGu]);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* 사이드바 네비게이션 */}
       <aside className="fixed left-0 top-0 h-screen w-72 bg-white border-r border-gray-200 flex flex-col z-40">
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center gap-3 mb-6">
@@ -73,6 +69,8 @@ export default function Home() {
             <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               placeholder="구 검색..."
               className="w-full pl-10 pr-4 py-3 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
             />
@@ -81,9 +79,9 @@ export default function Home() {
 
         <div className="flex-1 overflow-y-auto p-4">
           <div className="text-xs font-semibold text-gray-500 mb-3 px-2">
-            전체 구
+            전체 구 {search && `(${filteredGuData.length})`}
           </div>
-          {guData.map((gu) => (
+          {filteredGuData.map((gu) => (
             <button
               key={gu.id}
               onClick={() => setSelectedGu(gu)}
@@ -144,7 +142,6 @@ export default function Home() {
 
       {/* 메인 콘텐츠 */}
       <main className="ml-72 min-h-screen">
-        {/* 헤더 */}
         <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
           <div className="px-12 py-6 flex items-center justify-between">
             <div>
@@ -189,15 +186,6 @@ export default function Home() {
               </div>
               <div className="bg-white rounded-2xl p-6 border border-gray-200">
                 <div className="flex items-center gap-3 mb-2">
-                  <Users className="w-5 h-5 text-blue-500" />
-                  <span className="text-sm text-gray-600">이번 주 방문</span>
-                </div>
-                <div className="text-3xl font-bold text-gray-900">
-                  {selectedGu.visitors}
-                </div>
-              </div>
-              <div className="bg-white rounded-2xl p-6 border border-gray-200">
-                <div className="flex items-center gap-3 mb-2">
                   <Flame className="w-5 h-5 text-orange-500" />
                   <span className="text-sm text-gray-600">분위기</span>
                 </div>
@@ -234,42 +222,54 @@ export default function Home() {
               </div>
 
               <div className="space-y-4">
-                {(recommendations[selectedGu.id] || recommendations[1]).map(
-                  (item, idx) => (
-                    <div
-                      key={idx}
-                      className="group flex items-center gap-6 p-6 rounded-2xl border-2 border-gray-100 hover:border-purple-300 hover:shadow-lg transition-all cursor-pointer"
-                    >
+                {loading ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <div className="animate-spin w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full mx-auto mb-3"></div>
+                    추천 불러오는 중...
+                  </div>
+                ) : recommendations.length > 0 ? (
+                  recommendations.map((item, idx) => {
+                    const IconComponent = iconMap[item.icon] || Coffee;
+                    return (
                       <div
-                        className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0"
-                        style={{ backgroundColor: `${selectedGu.color}20` }}
+                        key={idx}
+                        className="group flex items-center gap-6 p-6 rounded-2xl border-2 border-gray-100 hover:border-purple-300 hover:shadow-lg transition-all cursor-pointer"
                       >
-                        <item.icon
-                          className="w-8 h-8"
-                          style={{ color: selectedGu.color }}
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">
-                          {item.title}
-                        </h4>
-                        <p className="text-gray-600 mb-3">{item.desc}</p>
-                        <div className="flex items-center gap-4">
-                          <div className="flex items-center gap-2 text-sm text-gray-500">
-                            <Clock className="w-4 h-4" />
-                            {item.time}
-                          </div>
-                          <div
-                            className="text-sm font-medium"
+                        <div
+                          className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0"
+                          style={{ backgroundColor: `${selectedGu.color}20` }}
+                        >
+                          <IconComponent
+                            className="w-8 h-8"
                             style={{ color: selectedGu.color }}
-                          >
-                            {item.price}
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">
+                            {item.title}
+                          </h4>
+                          <p className="text-gray-600 mb-3">{item.desc}</p>
+                          <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2 text-sm text-gray-500">
+                              <Clock className="w-4 h-4" />
+                              {item.time}
+                            </div>
+                            <div
+                              className="text-sm font-medium"
+                              style={{ color: selectedGu.color }}
+                            >
+                              {item.price}
+                            </div>
                           </div>
                         </div>
+                        <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-purple-500 group-hover:translate-x-1 transition-all" />
                       </div>
-                      <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-purple-500 group-hover:translate-x-1 transition-all" />
-                    </div>
-                  )
+                    );
+                  })
+                ) : (
+                  <div className="text-center py-8 text-gray-500">
+                    추천 정보를 불러올 수 없습니다
+                  </div>
                 )}
               </div>
             </div>

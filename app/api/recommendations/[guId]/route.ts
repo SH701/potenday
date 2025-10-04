@@ -1,4 +1,3 @@
-// app/api/recommendations/[guId]/route.ts
 import { NextResponse } from "next/server";
 import { guData } from "@/lib/gudata";
 import { generateGuRecommendations } from "@/lib/openai";
