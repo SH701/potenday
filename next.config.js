@@ -1,5 +1,7 @@
+/** @type {import('next').NextConfig} */
+
 const nextConfig = {
-  webpack: (config: { watchOptions: any }) => {
+  webpack: (config) => {
     config.watchOptions = {
       ...config.watchOptions,
       ignored: [

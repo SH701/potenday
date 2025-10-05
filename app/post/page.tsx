@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
 export default async function Posts({ searchParams }: Props) {
   const { page } = await searchParams;
   const pages = Number(page || "1");
-  const { posts, totalpage } = await getAllPosts(pages);
+  const { posts, totalPage } = await getAllPosts(pages);
   const user = await currentUser();
 
   return (
@@ -85,7 +85,7 @@ export default async function Posts({ searchParams }: Props) {
             </div>
           )}
           <div className="flex gap-2 mt-6 justify-center">
-            {Array.from({ length: totalpage }).map((_, i) => {
+            {Array.from({ length: totalPage }).map((_, i) => {
               const pageNum = i + 1;
               return (
                 <Link
