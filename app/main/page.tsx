@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import {
   MapPin,
   Sparkles,
-  TrendingUp,
   Star,
   Coffee,
   ShoppingBag,
@@ -14,6 +13,7 @@ import {
   Clock,
   Flame,
   BookOpenText,
+  Sun,
 } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import { guData } from "@/lib/gudata";
@@ -123,6 +123,15 @@ export default function Home() {
                   {selectedGu.hotspot}
                 </div>
               </div>
+              <div className="bg-white rounded-2xl p-6 border border-gray-200">
+                <div className="flex items-center gap-3 mb-2">
+                  <Sun className="w-5 h-5 text-yellow-500" />
+                  <span className="text-sm text-gray-600">날씨</span>
+                </div>
+                <div className="text-xl font-bold text-gray-900">
+                  날씨 api넣기
+                </div>
+              </div>
             </div>
 
             {/* 추천 코스 */}
@@ -131,7 +140,7 @@ export default function Home() {
                 <div className="flex items-center gap-3">
                   <Sparkles className="w-6 h-6 text-purple-500" />
                   <h3 className="text-2xl font-bold text-gray-900">
-                    AI 맞춤 추천 코스
+                    AI 추천 장소
                   </h3>
                 </div>
                 <button

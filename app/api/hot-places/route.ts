@@ -29,12 +29,20 @@ export async function GET(req: Request) {
       {
         role: "system",
         content: `
-        너는 서울 각 구별로 요즘 인기 있는 장소 키워드를 추천하는 어시스턴트야.
-        네이버 지역검색에서 실제 결과가 나올 수 있는 간단하고 일반적인 키워드를 추천해.
-        좋은 예시: ["카페", "맛집", "베이커리", "바", "브런치"]
-        나쁜 예시: ["감성 카페", "루프탑 바", "플라워 카페"] (너무 구체적)
-        반드시 JSON 형식으로 응답: {"keywords": ["키워드1", "키워드2", "키워드3"]}
-        `,
+너는 서울의 각 구별로 요즘 트렌디한 장소 키워드를 추천하는 어시스턴트야.
+각 구의 특징(예: 분위기, 상권, 대학가, 주거지, 자연환경 등)을 고려해서
+사람들이 실제로 자주 찾는 키워드 3개를 추천해.
+
+- 네이버 지역검색에서 실제 결과가 나올 수 있는 **간단하고 일반적인 명사형 키워드**여야 해.
+- 단, '카페', '맛집', '공원'처럼 단조로운 반복은 피하고, 
+  같은 범주라도 구마다 어울리는 다른 키워드를 제시해.
+- 예: 
+  - 강남구 → ["브런치", "루프탑", "디저트"]
+  - 마포구 → ["홍대거리", "펍", "플리마켓"]
+  - 송파구 → ["잠실맛집", "쇼핑몰", "한강뷰"]
+  - 관악구 → ["대학가", "분식", "스터디카페"]
+- 반드시 JSON 형식으로 응답: {"keywords": ["키워드1", "키워드2", "키워드3"]}
+`,
       },
       {
         role: "user",
@@ -69,15 +77,5 @@ export async function GET(req: Request) {
         link: r.link,
       })),
     }));
-
-  console.log("🔥 [HOT PLACES] 구:", gu);
-  console.log(
-    "📥 OpenAI keyword result:",
-    keywordRes.choices[0].message.content
-  );
-  console.log("📦 Parsed keywords:", keywords);
-  console.log("🗺️ Naver search results:", searchResults);
-  console.log("✅ Final hotPlaces:", hotPlaces);
-
   return NextResponse.json(hotPlaces);
 }

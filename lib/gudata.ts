@@ -8,7 +8,6 @@ export const guData = [
     hotspot: "청담·압구정",
     vibe: "럭셔리",
     rating: 4.7,
-    visitors: "2.8K",
   },
   {
     id: "11740",
@@ -17,7 +16,6 @@ export const guData = [
     hotspot: "천호동",
     vibe: "활기찬",
     rating: 4.3,
-    visitors: "1.4K",
   },
   {
     id: "11305",
@@ -26,7 +24,6 @@ export const guData = [
     hotspot: "수유리먹자골목",
     vibe: "로컬",
     rating: 4.2,
-    visitors: "1.1K",
   },
   {
     id: "11500",
@@ -35,7 +32,6 @@ export const guData = [
     hotspot: "마곡",
     vibe: "신도시",
     rating: 4.3,
-    visitors: "1.6K",
   },
   {
     id: "11620",
@@ -44,7 +40,6 @@ export const guData = [
     hotspot: "신림동",
     vibe: "대학가",
     rating: 4.1,
-    visitors: "1.3K",
   },
   {
     id: "11215",
@@ -53,7 +48,6 @@ export const guData = [
     hotspot: "건대입구",
     vibe: "젊음",
     rating: 4.5,
-    visitors: "2.2K",
   },
   {
     id: "11530",
@@ -62,7 +56,6 @@ export const guData = [
     hotspot: "구로디지털단지",
     vibe: "비즈니스",
     rating: 4.0,
-    visitors: "1.2K",
   },
   {
     id: "11545",
@@ -71,7 +64,6 @@ export const guData = [
     hotspot: "가산디지털단지",
     vibe: "테크",
     rating: 3.9,
-    visitors: "1.1K",
   },
   {
     id: "11350",
@@ -80,7 +72,6 @@ export const guData = [
     hotspot: "상계동",
     vibe: "주거",
     rating: 4.2,
-    visitors: "1.5K",
   },
   {
     id: "11320",
@@ -89,7 +80,6 @@ export const guData = [
     hotspot: "쌍문동",
     vibe: "자연친화",
     rating: 4.1,
-    visitors: "1.0K",
   },
   {
     id: "11230",
@@ -98,7 +88,6 @@ export const guData = [
     hotspot: "경동시장",
     vibe: "전통시장",
     rating: 4.3,
-    visitors: "1.7K",
   },
   {
     id: "11590",
@@ -107,7 +96,6 @@ export const guData = [
     hotspot: "사당·노량진",
     vibe: "활력",
     rating: 4.2,
-    visitors: "1.4K",
   },
   {
     id: "11440",
@@ -116,7 +104,6 @@ export const guData = [
     hotspot: "홍대·연남동",
     vibe: "힙한",
     rating: 4.9,
-    visitors: "3.2K",
   },
   {
     id: "11410",
@@ -125,7 +112,6 @@ export const guData = [
     hotspot: "신촌·이화",
     vibe: "청춘",
     rating: 4.4,
-    visitors: "1.9K",
   },
   {
     id: "11650",
@@ -134,7 +120,6 @@ export const guData = [
     hotspot: "반포한강공원",
     vibe: "여유로운",
     rating: 4.6,
-    visitors: "2.1K",
   },
   {
     id: "11200",
@@ -143,7 +128,6 @@ export const guData = [
     hotspot: "성수동",
     vibe: "감성적",
     rating: 4.9,
-    visitors: "3.0K",
   },
   {
     id: "11290",
@@ -152,7 +136,6 @@ export const guData = [
     hotspot: "북촌한옥마을",
     vibe: "고즈넉한",
     rating: 4.5,
-    visitors: "2.0K",
   },
   {
     id: "11710",
@@ -161,7 +144,6 @@ export const guData = [
     hotspot: "잠실·석촌호수",
     vibe: "역동적",
     rating: 4.6,
-    visitors: "2.7K",
   },
   {
     id: "11470",
@@ -170,7 +152,6 @@ export const guData = [
     hotspot: "목동",
     vibe: "정돈된",
     rating: 4.3,
-    visitors: "1.5K",
   },
   {
     id: "11560",
@@ -179,7 +160,6 @@ export const guData = [
     hotspot: "여의도",
     vibe: "세련된",
     rating: 4.5,
-    visitors: "2.4K",
   },
   {
     id: "11170",
@@ -188,7 +168,6 @@ export const guData = [
     hotspot: "이태원·한남동",
     vibe: "다국적",
     rating: 4.7,
-    visitors: "2.5K",
   },
   {
     id: "11380",
@@ -197,7 +176,6 @@ export const guData = [
     hotspot: "연신내·불광동",
     vibe: "문화적",
     rating: 4.3,
-    visitors: "1.6K",
   },
   {
     id: "11110",
@@ -206,7 +184,6 @@ export const guData = [
     hotspot: "인사동·북촌",
     vibe: "전통적",
     rating: 4.8,
-    visitors: "2.9K",
   },
   {
     id: "11140",
@@ -215,7 +192,6 @@ export const guData = [
     hotspot: "명동·남대문",
     vibe: "번화한",
     rating: 4.7,
-    visitors: "3.1K",
   },
   {
     id: "11260",
@@ -224,7 +200,6 @@ export const guData = [
     hotspot: "망우리공원",
     vibe: "조용한",
     rating: 4.1,
-    visitors: "1.2K",
   },
 ];
 
