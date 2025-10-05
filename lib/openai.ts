@@ -33,7 +33,5 @@ ${name} (${vibe} 분위기, 대표 핫스팟 ${hotspot})에서 즐길만한 장�
 
   const content = res.choices[0].message.content || "{}";
   const parsed = JSON.parse(content);
-
-  // recommendations 배열이 있으면 반환, 없으면 빈 배열
   return parsed.recommendations || [];
 }

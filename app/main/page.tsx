@@ -19,6 +19,7 @@ import { UserButton } from "@clerk/nextjs";
 import { guData } from "@/lib/gudata";
 import ChatWidget from "@/components/main/ChatWidget";
 import Sidebar from "@/components/main/Sidebar";
+import HotPlaces from "@/components/main/HotPlaces";
 
 const iconMap: Record<string, any> = {
   Coffee,
@@ -196,24 +197,7 @@ export default function Home() {
 
             {/* 트렌딩 */}
             <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl p-8 text-white">
-              <div className="flex items-center gap-3 mb-6">
-                <TrendingUp className="w-7 h-7" />
-                <h3 className="text-2xl font-bold">지금 이 구에서 핫한 장소</h3>
-              </div>
-              <div className="grid grid-cols-3 gap-6">
-                {["감성 카페 거리", "로컬 맛집 투어", "야경 명소"].map(
-                  (place, idx) => (
-                    <div
-                      key={idx}
-                      className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-colors cursor-pointer"
-                    >
-                      <div className="text-4xl font-bold mb-3">#{idx + 1}</div>
-                      <div className="text-lg font-semibold mb-2">{place}</div>
-                      <div className="text-sm text-white/80">실시간 인기</div>
-                    </div>
-                  )
-                )}
-              </div>
+              {selectedGu && <HotPlaces gu={selectedGu.name} />}
             </div>
           </div>
         ) : (

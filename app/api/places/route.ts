@@ -1,4 +1,3 @@
-// app/api/places/route.ts
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -34,7 +33,6 @@ export async function GET(req: Request) {
 
   const localData = await localRes.json();
 
-
   const results = await Promise.all(
     localData.items.map(async (item: any) => {
       const geoRes = await fetch(
@@ -55,11 +53,11 @@ export async function GET(req: Request) {
       let lng = null;
       if (geoData.addresses && geoData.addresses.length > 0) {
         lat = geoData.addresses[0].y;
-        lng = geoData.addresses[0].x; 
+        lng = geoData.addresses[0].x;
       }
 
       return {
-        name: item.title.replace(/<[^>]*>?/g, ""), 
+        name: item.title.replace(/<[^>]*>?/g, ""),
         category: item.category,
         address: item.address,
         roadAddress: item.roadAddress,
