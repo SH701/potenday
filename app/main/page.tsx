@@ -1,3 +1,4 @@
+// app/main/page.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -9,6 +10,7 @@ import Top from "@/components/main/Top";
 import StatsCards from "@/components/main/StatsCards";
 import RecommendationList from "@/components/main/RecommendationList";
 import EmptyState from "@/components/main/EmptyState";
+import PlaceModal from "@/components/main/PlaceModal";
 
 interface WeatherData {
   main: {
@@ -33,7 +35,9 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [selectedItem, setSelectedItem] = useState<Recommendation | null>(null);
 
+  // 추천 불러오기
   useEffect(() => {
     if (!selectedGu) return;
 
@@ -45,6 +49,7 @@ export default function Home() {
       .finally(() => setLoading(false));
   }, [selectedGu]);
 
+  // 날씨 불러오기
   useEffect(() => {
     if (!selectedGu) return;
 
@@ -53,6 +58,14 @@ export default function Home() {
       .then((data) => setWeather(data))
       .catch((err) => console.error("날씨 불러오기 실패:", err));
   }, [selectedGu]);
+
+  const handleItemClick = (item: Recommendation) => {
+    setSelectedItem(item);
+  };
+
+  const closeModal = () => {
+    setSelectedItem(null);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -83,6 +96,7 @@ export default function Home() {
               loading={loading}
               selectedGuId={selectedGu.id}
               selectedGuColor={selectedGu.color}
+              onItemClick={handleItemClick}
               guName={selectedGu.name}
             />
 
@@ -94,6 +108,13 @@ export default function Home() {
           <EmptyState />
         )}
       </main>
+
+      {/* 모달 */}
+      <PlaceModal
+        selectedItem={selectedItem}
+        onClose={closeModal}
+        guName={selectedGu?.name}
+      />
     </div>
   );
 }

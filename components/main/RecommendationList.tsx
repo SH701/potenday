@@ -19,6 +19,7 @@ interface RecommendationListProps {
   selectedGuId: string;
   selectedGuColor: string;
   guName: string;
+  onItemClick: (item: Recommendation) => void;
 }
 
 export default function RecommendationList({
@@ -26,7 +27,7 @@ export default function RecommendationList({
   loading,
   selectedGuId,
   selectedGuColor,
-  guName,
+  onItemClick,
 }: RecommendationListProps) {
   const router = useRouter();
 
@@ -57,7 +58,7 @@ export default function RecommendationList({
               key={idx}
               item={item}
               color={selectedGuColor}
-              guName={guName}
+              onClick={() => onItemClick(item)}
             />
           ))
         ) : (

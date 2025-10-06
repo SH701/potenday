@@ -60,7 +60,7 @@ JSON 형식으로 반환:
       "time": "운영시간 (모르면 10:00 - 22:00)"
     },
     {
-      "icon": "ShoppingBag",
+      "icon": "Utensils",
       "title": "정확한 장소명",
       "desc": "15자 이내 특징",
       "time": "운영시간"
