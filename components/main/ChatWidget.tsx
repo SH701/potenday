@@ -1,28 +1,60 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MessageCircle } from "lucide-react";
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<
     { role: "user" | "ai"; text: string }[]
   >([{ role: "ai", text: "안녕하세요!" }]);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  // ✅ 자동 스크롤 하단 고정
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
+
+  // ✅ AI 답변 타이핑 애니메이션
+  async function typeAIMessage(fullText: string) {
+    setLoading(false);
+    let displayed = "";
+    for (const char of fullText) {
+      displayed += char;
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1] = { role: "ai", text: displayed };
+        return updated;
+      });
+      await new Promise((r) => setTimeout(r, 20)); // 글자당 속도 (20ms)
+    }
+  }
 
   async function handleSend() {
     if (!message.trim()) return;
-    setMessages((prev) => [...prev, { role: "user", text: message }]);
-
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message }),
-    });
-
-    const data = await res.json();
-    setMessages((prev) => [...prev, { role: "ai", text: data.reply }]);
+    const userMsg = message;
+    setMessages((prev) => [...prev, { role: "user", text: userMsg }]);
     setMessage("");
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMsg }),
+      });
+
+      const data = await res.json();
+
+      // AI 말풍선 먼저 비워두고 타이핑 시작
+      setMessages((prev) => [...prev, { role: "ai", text: "" }]);
+      await typeAIMessage(data.reply);
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+    }
   }
 
   return (
@@ -30,14 +62,14 @@ export default function ChatWidget() {
       {/* 열기 버튼 */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-8 right-8 w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-purple-600"
+        className="fixed bottom-12 right-8 w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-purple-600"
       >
-        <MessageCircle className="w-6 h-6" />
+        <MessageCircle className="w-8 h-8" />
       </button>
 
       {/* 채팅창 */}
       {isOpen && (
-        <div className="fixed bottom-24 right-8 w-96 h-[600px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col z-50">
+        <div className="fixed bottom-32 right-16 w-[400px] h-[600px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col z-50">
           {/* 헤더 */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
             <div className="flex items-center gap-3">
@@ -45,8 +77,8 @@ export default function ChatWidget() {
                 <MessageCircle className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="font-bold text-gray-900">AI 가이드</h3>
-                <p className="text-xs text-gray-500">
+                <h3 className="font-bold text-lg text-gray-900">AI 가이드</h3>
+                <p className="text-sm text-gray-500">
                   원하는 장소나 활동을 물어보세요!
                 </p>
               </div>
@@ -76,7 +108,7 @@ export default function ChatWidget() {
             {messages.map((m, i) => (
               <div
                 key={i}
-                className={`max-w-[75%] px-3 py-2 rounded-xl text-sm ${
+                className={`max-w-[75%] w-fit px-3 py-2 rounded-xl text-[15px] break-words whitespace-pre-wrap leading-relaxed ${
                   m.role === "user"
                     ? "ml-auto bg-purple-500 text-white"
                     : "mr-auto bg-gray-100 text-gray-800"
@@ -85,19 +117,33 @@ export default function ChatWidget() {
                 {m.text}
               </div>
             ))}
+
+            {/* 로딩 중 ... 표시 */}
+            {loading && (
+              <div className="max-w-[75%] w-fit  mr-auto bg-gray-100 text-gray-500 px-3 py-2 rounded-xl text-base italic">
+                AI가 생각 중이에요...
+              </div>
+            )}
+
+            <div ref={messagesEndRef} />
           </div>
 
           {/* 입력창 */}
-          <div className="p-4 border-t border-gray-200">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSend();
+            }}
+            className="p-4 border-t border-gray-200"
+          >
             <input
               type="text"
               value={message}
               placeholder="메시지를 입력하세요..."
               onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
               className="w-full px-4 py-3 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
             />
-          </div>
+          </form>
         </div>
       )}
     </>

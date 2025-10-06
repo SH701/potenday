@@ -2,52 +2,73 @@ import OpenAI from "openai";
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+async function searchRealPlaces(gu: string, category: string) {
+  const response = await fetch(
+    `https://openapi.naver.com/v1/search/local.json?query=${gu} ${category}&display=5`,
+    {
+      headers: {
+        "X-Naver-Client-Id": process.env.NAVER_CLIENT_ID!,
+        "X-Naver-Client-Secret": process.env.NAVER_CLIENT_SECRET!,
+      },
+    }
+  );
+  const data = await response.json();
+  return data.items.map((item: any) => ({
+    name: item.title.replace(/<[^>]*>/g, ""),
+    address: item.address,
+    category: item.category,
+  }));
+}
+
 export async function generateGuRecommendations(
   name: string,
   vibe: string,
   hotspot: string
 ) {
+  const cafes = await searchRealPlaces(name, "카페");
+  const restaurants = await searchRealPlaces(name, "맛집");
+  const attractions = await searchRealPlaces(name, "명소");
+
   const prompt = `
-너는 서울의 각 구에 대해 여행 큐레이터 역할을 하는 어시스턴트야.
+너는 서울 ${name} 여행 큐레이터야.
 
-사용자가 제시한 지역 정보 (예: ${name}, ${vibe}, ${hotspot})를 참고해서
-해당 구 안에서 실제로 존재하는 명소, 카페, 전시 공간, 공원 등을 3곳 추천해줘.
+아래는 **실제 검색된 장소들**이야:
 
-조건:
-- 반드시 **실존하는 장소명**을 사용해야 하며, 네이버 지도나 검색에서 찾을 수 있어야 해.
-- 너무 일반적이거나 구체하지 않은 표현(예: "청담동 카페", "노원구 전망 좋은 곳")은 금지.
-- 각 추천은 장소의 특징이 잘 드러나는 간결한 설명을 포함해야 해 (15자 이내).
-- 운영시간은 실제 정보를 모를 경우, 일반적인 시간대(예: 10:00 - 22:00)로 가정해도 돼.
-- 각 장소마다 아래 JSON 형식의 객체로 반환해.
-- 아이콘은 장소 성격에 맞게 아래 중에서 고르기:
-  - 카페, 브런치 → Coffee
-  - 쇼핑, 마켓, 거리, 상점 → ShoppingBag
-  - 전시, 공원, 명소, 전망, 산책 → Camera
--카페 드 파리는 빼버려 인기가 많아도
--네이버 지도에 나오는 위치를 기반으로 추천해줘야해
--네이버지도에 나오는 카페로 등록된것만 넣어줘
--실제로 없는걸 너가 지어내지마
+카페: ${cafes.map((c: { name: any }) => c.name).join(", ")}
+쇼핑, 마켓, 거리, 상점: ${restaurants
+    .map((r: { name: any }) => r.name)
+    .join(", ")}
+전시, 공원, 명소, 전망, 산책: ${attractions
+    .map((a: { name: any }) => a.name)
+    .join(", ")}
 
-반드시 다음 형식으로 정확히 반환:
+이 중에서 ${vibe} 분위기에 맞고 ${hotspot} 근처의 장소를 3곳 골라서 추천해줘.
+**반드시 위 목록에서만 선택**하고, 없으면 다른 카테고리로 대체해.
+1. **반드시 위 목록에서만 선택**할 것
+2. ${vibe} 분위기와 ${hotspot} 테마에 가장 잘 맞는 3곳 선택
+3. 각 카테고리에서 최소 1곳씩 선택 (가능한 경우)
+4. 카페/맛집은 유명하고 평점 높은 곳 우선
+5. 위 목록에 적합한 장소가 없으면 명소로 대체
 
+JSON 형식으로 반환:
 {
   "recommendations": [
     {
       "icon": "Coffee",
-      "title": "장소명",
-      "desc": "장소 설명 (15자 이내)",
-      "time": "운영시간 (예: 11:00 - 22:00)"
+      "title": "정확한 장소명",
+      "desc": "15자 이내 특징",
+      "time": "운영시간 (모르면 10:00 - 22:00)"
     },
     {
       "icon": "ShoppingBag",
-      "title": "장소명",
-      "desc": "장소 설명 (15자 이내)",
+      "title": "정확한 장소명",
+      "desc": "15자 이내 특징",
       "time": "운영시간"
     },
     {
       "icon": "Camera",
-      "title": "장소명",
-      "desc": "장소 설명 (15자 이내)",
+      "title": "정확한 장소명",
+      "desc": "15자 이내 특징",
       "time": "운영시간"
     }
   ]

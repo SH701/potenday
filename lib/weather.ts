@@ -34,16 +34,10 @@ export async function Weather(guName: string): Promise<WeatherResponse> {
   }
 
   const apiKey = process.env.WEATHER_KEY;
-  if (!apiKey) {
-    throw new Error("WEATHER_KEY 환경 변수가 설정되지 않았습니다.");
-  }
 
   const { lat, lon } = gu;
 
   const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=kr`;
-
-  console.log("=== Weather API 호출 ===");
-  console.log("URL:", url.replace(apiKey, "***"));
 
   const res = await fetch(url);
 
@@ -56,11 +50,6 @@ export async function Weather(guName: string): Promise<WeatherResponse> {
   }
 
   const data: WeatherResponse = await res.json();
-
-  console.log("=== Weather API 응답 ===");
-  console.log("전체 응답:", JSON.stringify(data, null, 2));
-  console.log("온도:", data.main?.temp);
-  console.log("온도 타입:", typeof data.main?.temp);
 
   return data;
 }
