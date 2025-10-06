@@ -1,16 +1,24 @@
+// components/main/RecommendationList.tsx
 "use client";
 
 import { Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import RecommendationItem from "./RecommendationItem";
-import { Recommendation } from "@/app/main/page";
+
+interface Recommendation {
+  icon: string;
+  title: string;
+  desc: string;
+  time: string;
+  price?: string;
+}
 
 interface RecommendationListProps {
   recommendations: Recommendation[];
   loading: boolean;
   selectedGuId: string;
   selectedGuColor: string;
-  onItemClick: (item: Recommendation) => void; // ✅ 수정
+  guName: string;
 }
 
 export default function RecommendationList({
@@ -18,7 +26,7 @@ export default function RecommendationList({
   loading,
   selectedGuId,
   selectedGuColor,
-  onItemClick,
+  guName,
 }: RecommendationListProps) {
   const router = useRouter();
 
@@ -49,7 +57,7 @@ export default function RecommendationList({
               key={idx}
               item={item}
               color={selectedGuColor}
-              onClick={() => onItemClick(item)}
+              guName={guName}
             />
           ))
         ) : (

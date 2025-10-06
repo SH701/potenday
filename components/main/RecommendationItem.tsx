@@ -1,7 +1,7 @@
 // components/main/RecommendationItem.tsx
 "use client";
 
-import { Coffee, ShoppingBag, Camera, Clock, ChevronRight } from "lucide-react";
+import { Coffee, ShoppingBag, Camera, Clock, ExternalLink } from "lucide-react";
 
 const iconMap: Record<string, any> = {
   Coffee,
@@ -18,20 +18,28 @@ interface RecommendationItemProps {
     price?: string;
   };
   color: string;
-  onClick: () => void;
+  guName?: string;
 }
 
 export default function RecommendationItem({
   item,
   color,
-  onClick,
+  guName,
 }: RecommendationItemProps) {
   const IconComponent = iconMap[item.icon] || Coffee;
+
+  const handleClick = () => {
+    const searchQuery = guName ? `${item.title} ${guName}` : item.title;
+    const searchUrl = `https://search.naver.com/search.naver?query=${encodeURIComponent(
+      searchQuery
+    )}`;
+    window.open(searchUrl, "_blank");
+  };
 
   return (
     <div
       className="group flex items-center gap-6 p-6 rounded-2xl border-2 border-gray-100 hover:border-purple-300 hover:shadow-lg transition-all cursor-pointer"
-      onClick={onClick}
+      onClick={handleClick}
     >
       <div
         className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0"
@@ -56,7 +64,10 @@ export default function RecommendationItem({
           )}
         </div>
       </div>
-      <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-purple-500 group-hover:translate-x-1 transition-all" />
+      <div className="flex items-center gap-2 text-purple-500 opacity-0 group-hover:opacity-100 transition-opacity">
+        <span className="text-sm font-medium">네이버에서 보기</span>
+        <ExternalLink className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+      </div>
     </div>
   );
 }

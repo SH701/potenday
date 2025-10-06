@@ -9,9 +9,6 @@ import Top from "@/components/main/Top";
 import StatsCards from "@/components/main/StatsCards";
 import RecommendationList from "@/components/main/RecommendationList";
 import EmptyState from "@/components/main/EmptyState";
-import { X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import PlaceModal from "@/components/main/PlaceModal";
 
 interface WeatherData {
   main: {
@@ -36,9 +33,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [weather, setWeather] = useState<WeatherData | null>(null);
-
-  // 🔹 모달 상태
-  const [selectedItem, setSelectedItem] = useState<Recommendation | null>(null);
 
   useEffect(() => {
     if (!selectedGu) return;
@@ -70,6 +64,7 @@ export default function Home() {
         hoveredGu={hoveredGu}
         setHoveredGu={setHoveredGu}
       />
+
       <main className="ml-72 min-h-screen">
         <Top selectedGu={selectedGu} />
         <ChatWidget />
@@ -82,19 +77,16 @@ export default function Home() {
               hotspot={selectedGu.hotspot}
               weather={weather}
             />
+
             <RecommendationList
               recommendations={recommendations}
               loading={loading}
               selectedGuId={selectedGu.id}
               selectedGuColor={selectedGu.color}
-              onItemClick={(item) => setSelectedItem(item)}
-            />
-            <PlaceModal
-              selectedItem={selectedItem}
-              onClose={() => setSelectedItem(null)}
               guName={selectedGu.name}
             />
-            <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl p-8 text-white mt-8">
+
+            <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl p-8 text-white">
               <HotPlaces gu={selectedGu.name} />
             </div>
           </div>
