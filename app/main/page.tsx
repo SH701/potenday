@@ -26,6 +26,12 @@ const iconMap: Record<string, any> = {
   ShoppingBag,
   Camera,
 };
+interface WeatherData {
+  main: {
+    temp: number;
+    weather: { description: string; icon: string }[];
+  };
+}
 
 export default function Home() {
   const [selectedGu, setSelectedGu] = useState<(typeof guData)[number] | null>(
@@ -36,6 +42,7 @@ export default function Home() {
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
+  const [weather, setWeather] = useState<WeatherData | null>(null);
 
   useEffect(() => {
     if (!selectedGu) return;
@@ -47,7 +54,16 @@ export default function Home() {
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
   }, [selectedGu]);
+  useEffect(() => {
+    if (!selectedGu) return;
 
+    fetch(`/api/weather/${selectedGu.name}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setWeather(data);
+      })
+      .catch((err) => console.error("날씨 불러오기 실패:", err));
+  }, [selectedGu]);
   return (
     <div className="min-h-screen bg-gray-50">
       <Sidebar
@@ -129,7 +145,9 @@ export default function Home() {
                   <span className="text-sm text-gray-600">날씨</span>
                 </div>
                 <div className="text-xl font-bold text-gray-900">
-                  날씨 api넣기
+                  {weather
+                    ? `${Math.round(weather.main?.temp)}°C`
+                    : "로딩 중..."}
                 </div>
               </div>
             </div>
