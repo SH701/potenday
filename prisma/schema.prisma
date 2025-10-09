@@ -46,7 +46,7 @@ model Comment {
   post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId     Int
 }
-// 게시글 좋아요 
+
 model Like {
   id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
@@ -58,7 +58,7 @@ model Like {
   @@unique([userId, postId])
 }
 
-// 추천 장소 저장 
+
 model Star {
   id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [clerkId], onDelete: Cascade)

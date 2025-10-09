@@ -1,4 +1,3 @@
-// components/main/RecommendationList.tsx
 "use client";
 
 import { Sparkles } from "lucide-react";
@@ -6,6 +5,7 @@ import { useRouter } from "next/navigation";
 import RecommendationItem from "./RecommendationItem";
 
 interface Recommendation {
+  placeId: string;
   icon: string;
   title: string;
   desc: string;

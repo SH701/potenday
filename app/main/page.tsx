@@ -19,6 +19,7 @@ interface WeatherData {
 }
 
 export interface Recommendation {
+  placeId:string
   icon: string;
   title: string;
   desc: string;
@@ -37,7 +38,7 @@ export default function Home() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [selectedItem, setSelectedItem] = useState<Recommendation | null>(null);
 
-  // 추천 불러오기
+  
   useEffect(() => {
     if (!selectedGu) return;
 
@@ -49,7 +50,6 @@ export default function Home() {
       .finally(() => setLoading(false));
   }, [selectedGu]);
 
-  // 날씨 불러오기
   useEffect(() => {
     if (!selectedGu) return;
 
