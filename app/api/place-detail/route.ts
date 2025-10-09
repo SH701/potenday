@@ -4,6 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const query = searchParams.get("query");
+  const countParam = searchParams.get("count");
+  const count = countParam ? parseInt(countParam, 10) : 1;
 
   if (!query) {
     return NextResponse.json({ error: "Query is required" }, { status: 400 });
@@ -47,7 +49,6 @@ export async function GET(request: NextRequest) {
 
     if (process.env.GOOGLE_PLACES_API_KEY) {
       try {
-        // Google Places Text Search
         const googleSearchUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(
           query
         )}&key=${process.env.GOOGLE_PLACES_API_KEY}&language=ko`;
@@ -76,7 +77,6 @@ export async function GET(request: NextRequest) {
                 const detailsData = await detailsResponse.json();
 
                 if (detailsData.result?.photos) {
-                  // 최대 5장의 사진
                   photos = detailsData.result.photos
                     .slice(0, 5)
                     .map(
@@ -101,7 +101,8 @@ export async function GET(request: NextRequest) {
       telephone: naverItem.telephone,
       category: naverItem.category,
       link: naverItem.link,
-      photos,
+      photos: photos.slice(0, count), 
+      photo: photos?.[0] ?? null,
       rating,
       reviewCount,
     };

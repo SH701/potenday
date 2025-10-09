@@ -21,7 +21,7 @@ export default function Header() {
   return (
     <header className="fixed  z-30 w-full left-0 sm:px-10 flex justify-between top-10">
       <div className=" top-6 left-6 z-20">
-        <h1 className="text-3xl font-extrabold tracking-tight drop-shadow text-green-500">
+        <h1 className="text-3xl font-extrabold tracking-tight drop-shadow text-purple-500">
           오늘, 당신의 서울 코스를 공유해보세요! 🌿
         </h1>
         <p className="text-gray-600 text-sm mt-1">
@@ -32,10 +32,7 @@ export default function Header() {
       {/* PC 메뉴 */}
 
       <div className="flex items-center gap-4">
-        <Link
-          href="/main"
-          className=" hover:bg-green-100 rounded-xl transition-colors"
-        >
+        <Link href="/main" className=" rounded-xl transition-colors">
           <House className="w-6 h-6 text-gray-600" />
         </Link>
         <UserButton afterSignOutUrl="/" />

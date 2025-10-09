@@ -24,8 +24,18 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "images.clerk.dev",
-        pathname: "/img/**",
+        hostname: "img.clerk.com", 
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "maps.googleapis.com", 
+        pathname: "/maps/api/place/photo",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com", 
+        pathname: "/**",
       },
     ],
   },

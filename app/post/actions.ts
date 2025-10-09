@@ -22,9 +22,11 @@ export async function getAllPosts(page: number) {
     include: {
       user: {
         select: {
-          clerkId: true, 
-          photo: true, 
-          nickname: true, 
+          clerkId: true,
+          photo: true,
+          nickname: true,
+          username: true,
+          email: true,
         },
       },
     },
@@ -36,13 +38,11 @@ export async function getAllPosts(page: number) {
   return { totalPage, posts };
 }
 
-
 export async function writePost(prevState: unknown, formData: FormData) {
-  const { userId } = await auth(); 
+  const { userId } = await auth();
   if (!userId) {
     return { success: false, error: "로그인이 필요합니다." };
   }
-
 
   const rawPost = formData.get("post");
   const result = postSchema.safeParse({ post: rawPost });
@@ -51,14 +51,38 @@ export async function writePost(prevState: unknown, formData: FormData) {
     return { success: false, error: result.error.errors[0].message };
   }
 
-  
   await db.post.create({
     data: {
       post: result.data.post.trim(),
-      userId, 
+      userId,
     },
   });
   revalidatePath("/post");
 
+  return { success: true };
+}
+export async function deletePost(postId: number) {
+  const { userId } = await auth();
+  if (!userId) {
+    return { success: false, error: "로그인이 필요합니다." };
+  }
+  const post = await db.post.findUnique({
+    where: { id: postId },
+    select: { userId: true },
+  });
+
+  if (!post) {
+    return { success: false, error: "존재하지 않는 게시물입니다." };
+  }
+
+  if (post.userId !== userId) {
+    return { success: false, error: "게시물 작성자만 삭제할 수 있습니다." };
+  }
+
+  await db.post.delete({
+    where: { id: postId },
+  });
+
+  revalidatePath("/post");
   return { success: true };
 }

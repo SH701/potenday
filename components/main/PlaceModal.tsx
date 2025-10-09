@@ -19,6 +19,8 @@ interface NaverPlaceDetail {
   link: string;
   roadAddress: string;
   photos?: string[];
+
+  photo?: string;
   rating?: number;
   reviewCount?: number;
 }
@@ -40,7 +42,7 @@ export default function PlaceModal({
     fetch(
       `/api/place-detail?query=${encodeURIComponent(
         selectedItem.title + " " + (guName || "")
-      )}`
+      )}&count=5`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -85,7 +87,7 @@ export default function PlaceModal({
 
           <div className="p-6">
             {/* 🔹 Google Places 사진 */}
-            {placeDetail?.photos && placeDetail.photos.length > 0 && (
+            {placeDetail?.photos && placeDetail.photos.length > 0 ? (
               <div className="mb-6">
                 <div className="flex overflow-x-auto gap-3 pb-2">
                   {placeDetail.photos.map((url, idx) => (
@@ -97,14 +99,16 @@ export default function PlaceModal({
                     />
                   ))}
                 </div>
-                {placeDetail.rating && (
-                  <p className="text-sm text-gray-600 mt-2">
-                    ⭐ {placeDetail.rating}점 ({placeDetail.reviewCount ?? 0}{" "}
-                    리뷰)
-                  </p>
-                )}
               </div>
-            )}
+            ) : placeDetail?.photo ? (
+              <div className="mb-6">
+                <img
+                  src={placeDetail.photo}
+                  alt={selectedItem.title}
+                  className="h-40 w-full object-cover rounded-xl shadow-md"
+                />
+              </div>
+            ) : null}
 
             {/* 🔹 기본 정보 */}
             <div className="mb-6">

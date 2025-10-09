@@ -2,6 +2,7 @@
 
 import { MapPin, Search, ChevronRight } from "lucide-react";
 import { guData } from "@/lib/gudata";
+import { useRouter } from "next/navigation";
 
 type SidebarProps = {
   search: string;
@@ -24,6 +25,7 @@ export default function Sidebar({
     const keyword = (search || "").toLowerCase();
     return gu.name.toLowerCase().includes(keyword);
   });
+  const router = useRouter();
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-72 bg-white border-r border-gray-200 flex flex-col z-40">
@@ -111,7 +113,10 @@ export default function Sidebar({
 
       {/* 저장목록 버튼 */}
       <div className="p-4 border-t border-gray-200">
-        <button className="w-full py-3 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-800 transition-colors">
+        <button
+          className="w-full py-3 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-800 transition-colors"
+          onClick={() => router.push("/me")}
+        >
           내 저장 목록
         </button>
       </div>
