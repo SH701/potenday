@@ -113,15 +113,17 @@ export default function ChatWidget() {
             </button>
           </div>
 
-          <div className="flex-1 p-4 space-y-3">
+          <div className="flex-1 p-4 space-y-3 overflow-y-auto">
             {messages.map((m, i) => (
               <div
                 key={i}
-                className={`max-w-[85%] sm:max-w-[75%] w-fit px-3 py-2 rounded-xl text-sm sm:text-[15px] break-words whitespace-pre-wrap leading-relaxed ${
-                  m.role === "user"
-                    ? "ml-auto bg-purple-500 text-white"
-                    : "mr-auto bg-gray-100 text-gray-800"
-                }`}
+                className={` max-w-[85%] sm:max-w-[75%] w-fit px-3 py-2 rounded-xl text-sm sm:text-[15px]
+        break-words break-all whitespace-pre-line leading-relaxed
+        ${
+          m.role === "user"
+            ? "text-end ml-auto bg-purple-500 text-white  whitespace-pre-wrap"
+            : "mr-auto bg-gray-100 text-gray-800"
+        }`}
               >
                 {m.text}
               </div>

@@ -25,7 +25,8 @@ export async function POST(req: Request) {
     messages: [
       {
         role: "system",
-        content: "너는 사용자의 요청에서 장소 검색 키워드를 뽑는 어시스턴트야.",
+        content:
+          "너는 사용자의 요청에서 장소 검색 키워드를 뽑는 어시스턴트야. 장소를 추천해주면 다음 채팅에 그 장소를 토대로 어떻게 놀지 코스를 짜줘",
       },
       { role: "user", content: message },
     ],
