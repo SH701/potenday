@@ -8,7 +8,7 @@ import Button from "../etc/Button";
 export default function AddPost() {
   const [state, action] = useFormState(writePost, { success: false });
   return (
-    <form action={action} className="space-y-4 pb-4 mb-6">
+    <form action={action} className="space-y-4 pb-4 sm:mb-6">
       <textarea
         name="post"
         placeholder="당신만의 코스를 공유해보세요!"

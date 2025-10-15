@@ -59,21 +59,20 @@ export default function PlaceModal({
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm "
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
       >
         <motion.div
-          className="relative bg-white rounded-2xl shadow-2xl w-[500px] max-h-[85vh] overflow-y-auto"
+          className="relative bg-white rounded-2xl shadow-2xl w-[500px] max-h-[85vh] overflow-y-auto mx-4 sm:mx-0"
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           transition={{ duration: 0.2 }}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* 헤더 */}
           <div className="sticky top-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6 rounded-t-2xl">
             <button
               onClick={onClose}
@@ -86,7 +85,6 @@ export default function PlaceModal({
           </div>
 
           <div className="p-6">
-            {/* 🔹 Google Places 사진 */}
             {placeDetail?.photos && placeDetail.photos.length > 0 ? (
               <div className="mb-6">
                 <div className="flex overflow-x-auto gap-3 pb-2">

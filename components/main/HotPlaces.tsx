@@ -47,20 +47,28 @@ export default function HotPlaces({ gu }: { gu: string }) {
 
   return (
     <>
-      <div className="flex items-center gap-3 mb-6">
-        <TrendingUp className="w-7 h-7" />
-        <h3 className="text-2xl font-bold">지금 {gu}에서 핫한 장소</h3>
+      <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+        <TrendingUp className="w-5 h-5 sm:w-7 sm:h-7" />
+        <h3 className="text-lg sm:text-xl lg:text-2xl font-bold">
+          지금 {gu}에서 핫한 장소
+        </h3>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
         {places.map((p) => (
           <div
             key={p.rank}
-            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-colors cursor-pointer"
+            className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 hover:bg-white/20 transition-colors cursor-pointer"
           >
-            <div className="text-4xl font-bold mb-3">#{p.rank}</div>
-            <div className="text-lg font-semibold mb-2">{p.name}</div>
-            <div className="text-sm text-white/80">{p.tag}</div>
+            <div className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3">
+              #{p.rank}
+            </div>
+            <div className="text-base sm:text-lg font-semibold mb-1 sm:mb-2 line-clamp-1">
+              {p.name}
+            </div>
+            <div className="text-xs sm:text-sm text-white/80 line-clamp-1">
+              {p.tag}
+            </div>
           </div>
         ))}
       </div>

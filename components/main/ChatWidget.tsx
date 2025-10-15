@@ -62,14 +62,22 @@ export default function ChatWidget() {
       {/* 열기 버튼 */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-12 right-8 w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-purple-600"
+        className="fixed bottom-6 right-4 sm:bottom-12 sm:right-8 w-14 h-14 sm:w-16 sm:h-16 bg-purple-500 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-purple-600 z-50"
       >
-        <MessageCircle className="w-8 h-8" />
+        <MessageCircle className="w-7 h-7 sm:w-8 sm:h-8" />
       </button>
+
+      {/* 모바일 전체화면 오버레이 */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-40 sm:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
 
       {/* 채팅창 */}
       {isOpen && (
-        <div className="fixed bottom-32 right-16 w-[400px] h-[600px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col z-50">
+        <div className="fixed bottom-24 right-4 left-4 h-[600px] sm:inset-auto sm:bottom-32 sm:right-16 sm:w-[400px] sm:h-[600px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col z-50">
           {/* 헤더 */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
             <div className="flex items-center gap-3">
@@ -77,8 +85,10 @@ export default function ChatWidget() {
                 <MessageCircle className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="font-bold text-lg text-gray-900">AI 가이드</h3>
-                <p className="text-sm text-gray-500">
+                <h3 className="font-bold text-base sm:text-lg text-gray-900">
+                  AI 가이드
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-500">
                   원하는 장소나 활동을 물어보세요!
                 </p>
               </div>
@@ -103,12 +113,11 @@ export default function ChatWidget() {
             </button>
           </div>
 
-          {/* 메시지 영역 */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+          <div className="flex-1 p-4 space-y-3">
             {messages.map((m, i) => (
               <div
                 key={i}
-                className={`max-w-[75%] w-fit px-3 py-2 rounded-xl text-[15px] break-words whitespace-pre-wrap leading-relaxed ${
+                className={`max-w-[85%] sm:max-w-[75%] w-fit px-3 py-2 rounded-xl text-sm sm:text-[15px] break-words whitespace-pre-wrap leading-relaxed ${
                   m.role === "user"
                     ? "ml-auto bg-purple-500 text-white"
                     : "mr-auto bg-gray-100 text-gray-800"
@@ -118,17 +127,14 @@ export default function ChatWidget() {
               </div>
             ))}
 
-            {/* 로딩 중 ... 표시 */}
             {loading && (
-              <div className="max-w-[75%] w-fit  mr-auto bg-gray-100 text-gray-500 px-3 py-2 rounded-xl text-base italic">
+              <div className="max-w-[85%] sm:max-w-[75%] w-fit mr-auto bg-gray-100 text-gray-500 px-3 py-2 rounded-xl text-sm sm:text-base italic">
                 AI가 생각 중이에요...
               </div>
             )}
 
             <div ref={messagesEndRef} />
           </div>
-
-          {/* 입력창 */}
           <form
             onSubmit={(e) => {
               e.preventDefault();

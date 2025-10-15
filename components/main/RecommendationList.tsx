@@ -32,7 +32,7 @@ export default function RecommendationList({
   const router = useRouter();
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-8 mb-8">
+    <div className="bg-white rounded-2xl border border-gray-200 p-8 sm:mb-8 mb-4">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <Sparkles className="w-6 h-6 text-purple-500" />

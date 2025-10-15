@@ -24,13 +24,12 @@ export default async function Posts({ searchParams }: Props) {
         <Header />
         <div className=" flex flex-col w-[80%] h-full mx-auto">
           <AddPost />
-          {/* 게시글 목록 */}
           {posts.length === 0 ? (
             <span className="mt-[10%] text-center text-gray-600">
               등록된 글이 없습니다.
             </span>
           ) : (
-            <div className="mt-10 py-4 px-6 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
+            <div className="sm:mt-10 py-4 px-6 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
               {posts.map((post: any) => (
                 <Link
                   href={`/post/${post.id}`}

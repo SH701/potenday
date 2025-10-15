@@ -95,7 +95,6 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
 
   return (
     <main className="max-w-3xl mx-auto py-10 px-4">
-      {/* 🔹 상단 헤더 */}
       <div className="mb-8">
         <div className="flex items-center gap-2 text-gray-500 mb-2">
           <Link
@@ -130,9 +129,9 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
                 post.user?.email ??
                 "익명 사용자"}
             </p>
-                <div className="flex flex-col gap-1">
-            <PostDate date={post.created_at} />
-            <DeletePost postId={post.id} authorId={post.userId} />
+            <div className="flex flex-col gap-1">
+              <PostDate date={post.created_at} />
+              <DeletePost postId={post.id} authorId={post.userId} />
             </div>
           </div>
         </div>

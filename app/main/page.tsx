@@ -1,16 +1,14 @@
-// app/main/page.tsx
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { guData } from "@/lib/gudata";
 import ChatWidget from "@/components/main/ChatWidget";
 import Sidebar from "@/components/main/Sidebar";
-import HotPlaces from "@/components/main/HotPlaces";
 import Top from "@/components/main/Top";
 import StatsCards from "@/components/main/StatsCards";
 import RecommendationList from "@/components/main/RecommendationList";
 import EmptyState from "@/components/main/EmptyState";
 import PlaceModal from "@/components/main/PlaceModal";
+import HotPlaces from "@/components/main/HotPlaces";
 
 interface WeatherData {
   main: {
@@ -19,7 +17,7 @@ interface WeatherData {
 }
 
 export interface Recommendation {
-  placeId:string
+  placeId: string;
   icon: string;
   title: string;
   desc: string;
@@ -32,13 +30,13 @@ export default function Home() {
     null
   );
   const [hoveredGu, setHoveredGu] = useState<string | null>(null);
-  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+  const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Recommendation | null>(null);
 
-  
   useEffect(() => {
     if (!selectedGu) return;
 
@@ -68,29 +66,47 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Sidebar
-        search={search}
-        setSearch={setSearch}
-        selectedGu={selectedGu}
-        setSelectedGu={setSelectedGu}
-        hoveredGu={hoveredGu}
-        setHoveredGu={setHoveredGu}
-      />
+    <div className="min-h-screen bg-gray-50 flex overflow-x-hidden ">
+      <div className="hidden sm:block sm:w-72">
+        <Sidebar
+          search={search}
+          setSearch={setSearch}
+          selectedGu={selectedGu}
+          setSelectedGu={setSelectedGu}
+          hoveredGu={hoveredGu}
+          setHoveredGu={setHoveredGu}
+          isMobile={false}
+          isOpen={false}
+          setIsOpen={() => {}}
+        />
+      </div>
 
-      <main className="ml-72 min-h-screen">
-        <Top selectedGu={selectedGu} />
-        <ChatWidget />
+      <main className="flex-1 min-h-screen">
+        <Top
+          selectedGu={selectedGu}
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+        <Sidebar
+          search={search}
+          setSearch={setSearch}
+          selectedGu={selectedGu}
+          setSelectedGu={setSelectedGu}
+          hoveredGu={hoveredGu}
+          setHoveredGu={setHoveredGu}
+          isMobile={true}
+          isOpen={isSidebarOpen}
+          setIsOpen={setIsSidebarOpen}
+        />
 
         {selectedGu ? (
-          <div className="p-12">
+          <div className="p-4 sm:p-8 lg:p-12 min-w-screen">
             <StatsCards
               rating={selectedGu.rating}
               vibe={selectedGu.vibe}
               hotspot={selectedGu.hotspot}
               weather={weather}
             />
-
             <RecommendationList
               recommendations={recommendations}
               loading={loading}
@@ -99,17 +115,16 @@ export default function Home() {
               onItemClick={handleItemClick}
               guName={selectedGu.name}
             />
-
-            <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl p-8 text-white">
+            <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl p-6 sm:p-8 text-white">
               <HotPlaces gu={selectedGu.name} />
             </div>
           </div>
         ) : (
           <EmptyState />
         )}
+        <ChatWidget />
       </main>
 
-      {/* 모달 */}
       <PlaceModal
         selectedItem={selectedItem}
         onClose={closeModal}

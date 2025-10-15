@@ -110,7 +110,7 @@ export default function RecommendationItem({
       </div>
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-2">
-          <h4 className="text-xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors">
+          <h4 className="sm:text-xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors ">
             {item.title}
           </h4>
           <button
@@ -128,7 +128,7 @@ export default function RecommendationItem({
             />
           </button>
         </div>
-        <p className="text-gray-600 mb-3">{item.desc}</p>
+        <p className="text-gray-600 mb-3 text-sm sm:text-base">{item.desc}</p>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <Clock className="w-4 h-4" />
