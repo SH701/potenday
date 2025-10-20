@@ -11,7 +11,6 @@ export default function Page() {
 
   return (
     <main className="relative min-h-screen  overflow-hidden">
-      {/* 배경 이미지 영역 */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-[40%] left-[-10%] sm:top-60 sm:left-10 w-[300px] sm:w-[400px] lg:w-[480px] opacity-30 blur-sm animate-blob">
           <Image

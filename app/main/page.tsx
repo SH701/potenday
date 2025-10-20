@@ -9,6 +9,7 @@ import RecommendationList from "@/components/main/RecommendationList";
 import EmptyState from "@/components/main/EmptyState";
 import PlaceModal from "@/components/main/PlaceModal";
 import HotPlaces from "@/components/main/HotPlaces";
+import Onboarding from "@/components/etc/Onboarding";
 
 interface WeatherData {
   main: {
@@ -36,6 +37,11 @@ export default function Home() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Recommendation | null>(null);
+  const [personaSelected, setPersonaSelected] = useState<string | null>(null);
+  useEffect(() => {
+    const savePersona = localStorage.getItem("selectedPersona");
+    setPersonaSelected(savePersona);
+  }, []);
 
   useEffect(() => {
     if (!selectedGu) return;
@@ -64,7 +70,9 @@ export default function Home() {
   const closeModal = () => {
     setSelectedItem(null);
   };
-
+  if (!personaSelected) {
+    return <Onboarding onSelect={() => setPersonaSelected("selected")} />;
+  }
   return (
     <div className="min-h-screen bg-gray-50 flex overflow-x-hidden ">
       <div className="hidden sm:block sm:w-72">

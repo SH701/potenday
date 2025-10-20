@@ -2,33 +2,48 @@
 
 import { useEffect, useRef, useState } from "react";
 import { MessageCircle } from "lucide-react";
+import Image from "next/image";
+import { personas } from "@/lib/persona";
+
+interface Message {
+  role: "user" | "ai";
+  text: string;
+}
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [personaName, setPersonaName] = useState("AI 가이드");
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<
-    { role: "user" | "ai"; text: string }[]
-  >([{ role: "ai", text: "안녕하세요!" }]);
+  const [messages, setMessages] = useState<Message[]>([
+    { role: "ai", text: "안녕하세요!" },
+  ]);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-
-  // ✅ 자동 스크롤 하단 고정
+  useEffect(() => {
+    const savedPersonaId = localStorage.getItem("selectedPersona");
+    const persona = personas.find((p) => p.id === savedPersonaId);
+    if (persona) {
+      setPersonaName(persona.name);
+    }
+  }, []);
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
-  // ✅ AI 답변 타이핑 애니메이션
-  async function typeAIMessage(fullText: string) {
+  async function typeAIMessage(fullText: string, imagePath?: string) {
     setLoading(false);
     let displayed = "";
     for (const char of fullText) {
       displayed += char;
       setMessages((prev) => {
         const updated = [...prev];
-        updated[updated.length - 1] = { role: "ai", text: displayed };
+        updated[updated.length - 1] = {
+          role: "ai",
+          text: displayed,
+        };
         return updated;
       });
-      await new Promise((r) => setTimeout(r, 20)); // 글자당 속도 (20ms)
+      await new Promise((r) => setTimeout(r, 20));
     }
   }
 
@@ -47,10 +62,14 @@ export default function ChatWidget() {
       });
 
       const data = await res.json();
-
-      // AI 말풍선 먼저 비워두고 타이핑 시작
-      setMessages((prev) => [...prev, { role: "ai", text: "" }]);
-      await typeAIMessage(data.reply);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "ai",
+          text: "",
+        },
+      ]);
+      await typeAIMessage(data.reply, data.imagePath);
     } catch (err) {
       console.error(err);
       setLoading(false);
@@ -86,7 +105,7 @@ export default function ChatWidget() {
               </div>
               <div>
                 <h3 className="font-bold text-base sm:text-lg text-gray-900">
-                  AI 가이드
+                  AI 가이드 : {personaName}
                 </h3>
                 <p className="text-xs sm:text-sm text-gray-500">
                   원하는 장소나 활동을 물어보세요!
@@ -117,15 +136,22 @@ export default function ChatWidget() {
             {messages.map((m, i) => (
               <div
                 key={i}
-                className={` max-w-[85%] sm:max-w-[75%] w-fit px-3 py-2 rounded-xl text-sm sm:text-[15px]
-        break-words break-all whitespace-pre-line leading-relaxed
-        ${
-          m.role === "user"
-            ? "text-end ml-auto bg-purple-500 text-white  whitespace-pre-wrap"
-            : "mr-auto bg-gray-100 text-gray-800"
-        }`}
+                className={`max-w-[85%] sm:max-w-[75%] w-fit ${
+                  m.role === "user" ? "ml-auto" : "mr-auto"
+                }`}
               >
-                {m.text}
+                {/* 텍스트 메시지 */}
+                <div
+                  className={`px-3 py-2 rounded-xl text-sm sm:text-[15px]
+                    break-words break-all whitespace-pre-line leading-relaxed
+                    ${
+                      m.role === "user"
+                        ? "bg-purple-500 text-white whitespace-pre-wrap"
+                        : "bg-gray-100 text-gray-800"
+                    }`}
+                >
+                  {m.text}
+                </div>
               </div>
             ))}
 
@@ -137,6 +163,7 @@ export default function ChatWidget() {
 
             <div ref={messagesEndRef} />
           </div>
+
           <form
             onSubmit={(e) => {
               e.preventDefault();
