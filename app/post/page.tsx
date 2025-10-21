@@ -29,62 +29,64 @@ export default async function Posts({ searchParams }: Props) {
               등록된 글이 없습니다.
             </span>
           ) : (
-            <div className="sm:mt-10 py-4 px-6 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
-              {posts.map((post: any) => (
-                <Link
-                  href={`/post/${post.id}`}
-                  key={post.id}
-                  className="block border-t first:border-t-0 border-gray-200/50 pb-4 pt-5 hover:bg-purple-50/40 rounded-xl transition-all duration-200"
-                >
-                  <div className="flex gap-4">
-                    {/* 프로필 */}
-                    {post.user.photo ? (
-                      <Image
-                        src={post.user.photo}
-                        alt="avatar"
-                        width={44}
-                        height={44}
-                        className="rounded-full size-11 border border-gray-200"
-                      />
-                    ) : (
-                      <Image
-                        src={user?.imageUrl || "/default-avatar.png"}
-                        alt="프로필"
-                        width={44}
-                        height={44}
-                        className="size-11 rounded-full border border-gray-200"
-                      />
-                    )}
-
-                    {/* 내용 */}
-                    <div className="flex flex-col flex-1">
-                      <div className="flex justify-between items-center">
-                        <p className="text-sm font-semibold text-gray-800">
-                          {post.user.username ??
-                            post.user.nickname ??
-                            post.user.email ??
-                            "익명 사용자"}
-                        </p>
-                        <PostDate date={post.created_at} />
-                      </div>
-                      <p className="pt-2 text-sm text-gray-700 leading-relaxed">
-                        {post.post}
-                      </p>
-                      {post.photo && (
-                        <div className="mt-3">
-                          <Image
-                            src={post.photo}
-                            alt="post image"
-                            width={600}
-                            height={400}
-                            className="rounded-lg object-cover max-h-80 w-full shadow-md"
-                          />
-                        </div>
+            <div className="sm:mt-10 py-4 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
+              <div className="flex flex-col divide-y divide-gray-400">
+                {posts.map((post: any) => (
+                  <Link
+                    href={`/post/${post.id}`}
+                    key={post.id}
+                    className="block py-5 hover:bg-purple-50/40 px-6  transition-all duration-200"
+                  >
+                    <div className="flex gap-4">
+                      {/* 프로필 */}
+                      {post.user.photo ? (
+                        <Image
+                          src={post.user.photo}
+                          alt="avatar"
+                          width={44}
+                          height={44}
+                          className="rounded-full size-11 border border-gray-200"
+                        />
+                      ) : (
+                        <Image
+                          src={user?.imageUrl || "/default-avatar.png"}
+                          alt="프로필"
+                          width={44}
+                          height={44}
+                          className="size-11 rounded-full border border-gray-200"
+                        />
                       )}
+
+                      {/* 내용 */}
+                      <div className="flex flex-col flex-1">
+                        <div className="flex justify-between items-center">
+                          <p className="text-sm font-semibold text-gray-800">
+                            {post.user.username ??
+                              post.user.nickname ??
+                              post.user.email ??
+                              "익명 사용자"}
+                          </p>
+                          <PostDate date={post.created_at} />
+                        </div>
+                        <p className="pt-2 text-sm text-gray-700 leading-relaxed">
+                          {post.post}
+                        </p>
+                        {post.photo && (
+                          <div className="mt-3">
+                            <Image
+                              src={post.photo}
+                              alt="post image"
+                              width={600}
+                              height={400}
+                              className="rounded-lg object-cover max-h-80 w-full shadow-md"
+                            />
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ))}
+              </div>
             </div>
           )}
 

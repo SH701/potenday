@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import db from "@/lib/db";
+import { revalidatePath } from "next/cache";
 
 export async function POST(request: Request) {
   try {
@@ -22,7 +23,7 @@ export async function POST(request: Request) {
         price,
       },
     });
-
+    revalidatePath("/me");
     return NextResponse.json({ saved: true, star });
   } catch (error) {
     console.error("Error creating star:", error);
@@ -44,8 +45,6 @@ export async function DELETE(request: Request) {
     }
 
     const { placeId } = await request.json();
-
-    
 
     await db.star.deleteMany({
       where: {

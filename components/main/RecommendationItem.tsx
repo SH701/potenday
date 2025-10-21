@@ -1,4 +1,3 @@
-// components/main/RecommendationItem.tsx
 "use client";
 
 import {
@@ -9,6 +8,7 @@ import {
   Utensils,
   Star,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 const iconMap: Record<string, any> = {
@@ -39,6 +39,7 @@ export default function RecommendationItem({
   const IconComponent = iconMap[item.icon] || Coffee;
   const [saved, setSaved] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   useEffect(() => {
     const checkSaved = async () => {
       try {
@@ -84,7 +85,7 @@ export default function RecommendationItem({
           price: item.price || "",
         }),
       });
-
+      router.refresh();
       if (!response.ok) {
         setSaved(!newSavedState); // 실패시 롤백
         console.error("Failed to save");

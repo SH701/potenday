@@ -22,7 +22,6 @@ export default function PostDate({ date }: { date: Date }) {
     else if (days < 7) formatted = `${days}일 전`;
     else
       formatted = target.toLocaleDateString("ko-KR", {
-        year: "numeric",
         month: "short",
         day: "numeric",
       });

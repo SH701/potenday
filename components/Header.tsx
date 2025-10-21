@@ -12,7 +12,7 @@ export default function Header() {
         <h1 className="sm:text-3xl  font-extrabold tracking-tight drop-shadow text-purple-500">
           당신의 서울 코스를 공유해보세요! 🌿
         </h1>
-        <p className="text-gray-600 sm:text-sm mt-1 text-xs">
+        <p className="text-gray-600 sm:text-sm mt-1 text-[11px]">
           내가 다녀온 장소를 남기고, 다른 사람의 코스를 둘러보세요.
         </p>
       </div>

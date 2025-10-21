@@ -1,16 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  Coffee,
-  Utensils,
-  Camera,
-  MapPin,
-  Clock,
-  AlertCircle,
-  ImageIcon,
-  MoveLeft,
-} from "lucide-react";
+import { MapPin, Clock, AlertCircle, ImageIcon, MoveLeft } from "lucide-react";
 import { guData } from "@/lib/gudata";
 import { useRouter } from "next/navigation";
 

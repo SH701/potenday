@@ -154,13 +154,9 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
         <div className="mt-6">
           <button
             onClick={toggleLike}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-              liked
-                ? "bg-red-500 text-white hover:bg-red-400"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
+            className={` rounded-lg text-sm font-medium transition flex flex-row gap-1`}
           >
-            {liked ? "💔 " : "❤️ "}
+            <p>❤️</p>
             {likeCount}
           </button>
         </div>
@@ -169,10 +165,10 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
       {/* 🔹 댓글 입력 */}
       <form
         onSubmit={handleAddComment}
-        className="bg-white border border-gray-100 shadow-sm rounded-xl p-4 mb-6"
+        className="bg-white bordershadow-sm rounded-xl p-4 mb-6"
       >
         <textarea
-          className="w-full border border-gray-200 rounded-md p-3 text-sm focus:ring-2 focus:ring-purple-400 focus:outline-none resize-none"
+          className="w-full border border-gray-400 rounded-md p-3 text-sm focus:ring-2 focus:ring-purple-400 focus:outline-none resize-none"
           placeholder="댓글을 입력하세요..."
           rows={3}
           value={newComment}
@@ -200,8 +196,8 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
                 <Image
                   src={comment.user.photo}
                   alt="avatar"
-                  width={40}
-                  height={40}
+                  width={48}
+                  height={36}
                   className="rounded-full"
                 />
               ) : (
