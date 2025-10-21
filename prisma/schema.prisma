@@ -73,7 +73,7 @@ model Star {
 
   @@unique([userId, placeId]) 
 }
-model Course{
+model Course {
   id String @id @default(cuid())
   userId String
   personaId String?
