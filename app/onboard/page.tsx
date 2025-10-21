@@ -2,17 +2,15 @@
 import { useState } from "react";
 import Image from "next/image";
 import { personas } from "@/lib/persona";
+import { useRouter } from "next/navigation";
 
-interface OnboardingProps {
-  onSelect: () => void; // ✅ 부모(Home)에서 넘겨주는 콜백
-}
-
-export default function Onboarding({ onSelect }: OnboardingProps) {
+export default function Onboarding() {
   const [selected, setSelected] = useState<string | null>(null);
-
+  const router = useRouter();
   const handleSelect = (id: string) => {
     setSelected(id);
     localStorage.setItem("selectedPersona", id);
+    document.cookie = `selectedPersona=${id}; path=/; max-age=31536000`;
   };
 
   return (
@@ -48,12 +46,9 @@ export default function Onboarding({ onSelect }: OnboardingProps) {
 
       {selected && (
         <div className="mt-8 flex flex-col items-center">
-          <p className="text-gray-700 mb-4">
-            <span className="font-semibold">{selected}</span>
-          </p>
           <button
             className="bg-purple-500 text-white px-6 py-2 rounded-full hover:bg-purple-600 transition"
-            onClick={onSelect}
+            onClick={() => router.push("/main")}
           >
             시작하기
           </button>

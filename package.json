@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prisma:generate": "dotenv -e .env.local -- prisma generate",
+    "prisma:push": "dotenv -e .env.local -- prisma db push",
+    "prisma:studio": "dotenv -e .env.local -- prisma studio",
+    "prisma:migrate": "dotenv -e .env.local -- prisma migrate dev"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.33.0",
@@ -37,6 +41,7 @@
     "@types/react-dom": "^18.2.22",
     "@types/react-simple-maps": "^3.0.6",
     "autoprefixer": "^10.4.16",
+    "dotenv-cli": "^10.0.0",
     "eslint": "^8.56.0",
     "eslint-config-next": "14.1.2",
     "postcss": "^8.4.32",

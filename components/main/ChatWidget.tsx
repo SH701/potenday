@@ -14,6 +14,7 @@ export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [personaName, setPersonaName] = useState("AI 가이드");
+  const [personaimg, setPersonaimg] = useState<string>("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([
     { role: "ai", text: "안녕하세요!" },
@@ -24,13 +25,14 @@ export default function ChatWidget() {
     const persona = personas.find((p) => p.id === savedPersonaId);
     if (persona) {
       setPersonaName(persona.name);
+      setPersonaimg(persona.image);
     }
   }, []);
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
-  async function typeAIMessage(fullText: string, imagePath?: string) {
+  async function typeAIMessage(fullText: string) {
     setLoading(false);
     let displayed = "";
     for (const char of fullText) {
@@ -69,7 +71,7 @@ export default function ChatWidget() {
           text: "",
         },
       ]);
-      await typeAIMessage(data.reply, data.imagePath);
+      await typeAIMessage(data.reply);
     } catch (err) {
       console.error(err);
       setLoading(false);
@@ -100,12 +102,22 @@ export default function ChatWidget() {
           {/* 헤더 */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-                <MessageCircle className="w-5 h-5 text-white" />
+              <div className="w-12 h-12  rounded-xl flex items-center justify-center">
+                {personaimg ? (
+                  <Image
+                    src={personaimg}
+                    alt={personaName}
+                    width={48}
+                    height={48}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <MessageCircle className="w-5 h-5 text-white" />
+                )}
               </div>
               <div>
                 <h3 className="font-bold text-base sm:text-lg text-gray-900">
-                  AI 가이드 : {personaName}
+                  {personaName}
                 </h3>
                 <p className="text-xs sm:text-sm text-gray-500">
                   원하는 장소나 활동을 물어보세요!

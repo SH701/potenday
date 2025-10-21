@@ -1,5 +1,5 @@
 "use client";
-import { BookOpenText, Menu } from "lucide-react";
+import { BookOpenText, Menu, Bot } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 
@@ -15,7 +15,13 @@ export default function Top({
   setIsSidebarOpen,
 }: HeaderProps) {
   const router = useRouter();
-
+  const changeBot = () => {
+    if (confirm("AI를 변경하시겠습니까?")) {
+      localStorage.removeItem("selectedPersona");
+      document.cookie = "selectedPersona=; path=/; max-age=0";
+      router.push("/onboard");
+    }
+  };
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
       <div className="px-4 sm:px-8 lg:px-12 py-4 sm:py-6 flex items-center justify-between gap-4">
@@ -45,8 +51,16 @@ export default function Top({
             className="p-2 sm:p-3 hover:bg-gray-100 rounded-xl transition-colors"
             onClick={() => router.push("/post")}
           >
-            <BookOpenText className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />
+            <BookOpenText className="w-5 h-5 sm:w-6 sm:h-6 text-[#123452]" />
           </button>
+          <div>
+            <button
+              className="sm:py-0 px-1 hover:bg-gray-100 rounded-xl transition-colors"
+              onClick={changeBot}
+            >
+              <Bot className="w-5 h-5 sm:w-7 sm:h-7 text-[#14334e]" />
+            </button>
+          </div>
           <div className="p-2 sm:p-3">
             <UserButton />
           </div>

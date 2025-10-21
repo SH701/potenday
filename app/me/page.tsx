@@ -1,9 +1,13 @@
 import db from "@/lib/db";
 import { Star, Clock, FolderHeart } from "lucide-react";
+import { currentUser } from "@clerk/nextjs/server";
+import BackButton from "@/components/etc/BackButton";
 
 export default async function Me() {
-  const stars = await db.star.findMany();
-
+  const user = await currentUser();
+  const stars = await db.star.findMany({
+    where: { userId: user?.id },
+  });
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 py-12 px-6">
       <div className="max-w-3xl mx-auto">
@@ -13,7 +17,7 @@ export default async function Me() {
             <FolderHeart className="w-8 h-8 text-purple-600" />
             <h1 className="text-3xl font-bold text-gray-900">내 저장 목록</h1>
           </div>
-          <span className="text-sm text-gray-500">총 {stars.length}개</span>
+          <BackButton />
         </div>
 
         {/* 내용 */}

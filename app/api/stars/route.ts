@@ -25,7 +25,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ saved: true, star });
   } catch (error) {
-    console.error("Error creating star:", error); // ← 자세한 에러 로그
+    console.error("Error creating star:", error);
     return NextResponse.json(
       {
         error: "Failed to save",
@@ -45,7 +45,7 @@ export async function DELETE(request: Request) {
 
     const { placeId } = await request.json();
 
-    console.log("Deleting star:", { userId, placeId });
+    
 
     await db.star.deleteMany({
       where: {

@@ -12,7 +12,12 @@ export default clerkMiddleware(async (auth, req) => {
   }
 
   if (userId && req.nextUrl.pathname === "/") {
-    return NextResponse.redirect(new URL("/main", req.url));
+    const hasPersona = req.cookies.get("selectedPersona");
+    if (hasPersona) {
+      return NextResponse.redirect(new URL("/main", req.url));
+    } else {
+      return NextResponse.redirect(new URL("/onboard", req.url));
+    }
   }
 
   return NextResponse.next();
