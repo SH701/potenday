@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -19,6 +19,8 @@ model User {
   comments  Comment[]
   Like Like[]
   Star Star[]
+
+  Course Course[]
 }
 
 model Post {
@@ -71,4 +73,13 @@ model Star {
 
   @@unique([userId, placeId]) 
 }
-
+model Course{
+  id String @id @default(cuid())
+  userId String
+  personaId String?
+  title String
+  vibe String?
+  spots Json
+  createdAt DateTime   @default(now())
+  user      User?     @relation(fields: [userId], references: [clerkId])
+}
