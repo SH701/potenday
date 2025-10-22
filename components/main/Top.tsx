@@ -1,6 +1,6 @@
 "use client";
-import { BookOpenText, Menu, Bot, Sparkles } from "lucide-react";
-import { UserButton } from "@clerk/nextjs";
+import { BookOpenText, Menu, Bot, Sparkles, MapPinPlus } from "lucide-react";
+import { UserButton, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import GenerateCourseModal from "@/components/course/GenerateCourse";
@@ -18,6 +18,10 @@ export default function Top({
 }: HeaderProps) {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { user } = useUser();
+  const personaId =
+    (user?.publicMetadata?.personaId as string | undefined) ?? "ruby";
+
   const changeBot = () => {
     if (confirm("AI를 변경하시겠습니까?")) {
       localStorage.removeItem("selectedPersona");
@@ -52,33 +56,35 @@ export default function Top({
           <button
             onClick={() => setIsModalOpen(true)}
             className="
-          fixed bottom-24 right-4 sm:static
-          z-50 flex items-center justify-center gap-2
-          px-5 py-2.5 rounded-full font-semibold tracking-tight
-          transition-all duration-300 ease-out
-          bg-white/90 text-gray-800 backdrop-blur-md shadow-md border border-gray-200
-          hover:bg-white hover:shadow-xl hover:scale-[1.03]
-          active:scale-95
-          sm:bg-gradient-to-r sm:from-purple-500 sm:to-pink-500 sm:text-white sm:border-none
-          sm:hover:shadow-lg sm:hover:brightness-110
-        "
+    fixed bottom-24 right-4 sm:static
+    z-50 flex items-center justify-center gap-2
+     p-3.5 sm:px-5 sm:py-2.5
+    rounded-full font-semibold tracking-tight
+    transition-all duration-300 ease-out
+    bg-purple-500 text-white hover:bg-purple-600
+    backdrop-blur-md shadow-md
+    hover:shadow-xl hover:scale-[1.03]
+    active:scale-95
+    sm:bg-gradient-to-r sm:from-purple-500 sm:to-pink-500 sm:text-white sm:border-none sm:mr-3
+    sm:hover:shadow-lg sm:hover:brightness-110
+  "
           >
             {/* 모바일: 아이콘 */}
-            <Sparkles className="w-6 h-6 sm:hidden" />
+            <MapPinPlus className="w-7 h-7 sm:hidden" />
             {/* 데스크탑: 텍스트 */}
             <span className="hidden sm:inline text-sm font-semibold">
               ✨ AI 코스 생성
             </span>
           </button>
           <button
-            className="p-2 sm:p-3 hover:bg-gray-100 rounded-xl transition-colors"
+            className="p-2  hover:bg-gray-100 rounded-xl transition-colors"
             onClick={() => router.push("/post")}
           >
             <BookOpenText className="w-5 h-5 sm:w-6 sm:h-6 text-[#123452]" />
           </button>
           <div>
             <button
-              className="sm:py-0 px-1 hover:bg-gray-100 rounded-xl transition-colors"
+              className="p-2  hover:bg-gray-100 rounded-xl transition-colors"
               onClick={changeBot}
             >
               <Bot className="w-5 h-5 sm:w-7 sm:h-7 text-[#14334e]" />
