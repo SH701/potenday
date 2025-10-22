@@ -38,7 +38,6 @@ export default function GenerateCourseModal({
       setCourse(data.course);
       setLocation("");
       setMessage("");
-      console.log(data);
     } catch (err) {
       console.error(err);
     } finally {
@@ -132,7 +131,6 @@ export default function GenerateCourseModal({
               </div>
 
               <div className="relative space-y-6 pl-8">
-
                 <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-400 to-pink-400"></div>
 
                 {course.spots.map((spot: any, i: number) => (
