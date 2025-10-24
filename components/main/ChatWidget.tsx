@@ -119,8 +119,8 @@ export default function ChatWidget() {
                 <h3 className="font-bold text-base sm:text-lg text-gray-900">
                   {personaName}
                 </h3>
-                <p className="text-xs sm:text-sm text-gray-500">
-                  원하는 장소나 활동을 물어보세요!
+                <p className="text-xs  text-gray-500">
+                  원하는 장소나 활동의 키워드를 입력하세요.
                 </p>
               </div>
             </div>
@@ -186,7 +186,7 @@ export default function ChatWidget() {
             <input
               type="text"
               value={message}
-              placeholder="메시지를 입력하세요..."
+              placeholder="예: 합정 카페 추천해줘, 강남 맛집 추천해줘"
               onChange={(e) => setMessage(e.target.value)}
               className="w-full px-4 py-3 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
             />

@@ -2,11 +2,13 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { auth } from "@clerk/nextjs/server";
 import db from "@/lib/db";
+import { famousgu } from "@/lib/gudata";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+// ✅ 네이버 지역 검색
 async function searchNaver(query: string) {
-  const r = await fetch(
+  const res = await fetch(
     `https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(
       query
     )}&display=1`,
@@ -17,8 +19,8 @@ async function searchNaver(query: string) {
       },
     }
   );
-
-  return r.json();
+  const data = await res.json();
+  return data.items?.[0] || null;
 }
 
 export async function POST(req: Request) {
@@ -29,63 +31,63 @@ export async function POST(req: Request) {
 
     const { message, weather, time, location, personaId } = await req.json();
 
+    // ✅ location 기반으로 구/인근 지역 자동 인식
+    const guName =
+      Object.keys(famousgu).find((gu) => location.includes(gu)) || location;
+    const areaHint = famousgu[guName as keyof typeof famousgu] || location;
+    const district = `${guName}구`;
+
+    // ✅ system prompt
     const systemPrompt = `
-너는 서울 여행 전문 도슨트야. 사용자의 요청에 따라 **실제 장소명으로 구성된 하루 여행 코스**를 만들어줘.
+너는 서울 여행 전문 도슨트야. 사용자의 요청에 따라 "${district}" 인근(같은 구 또는 인접 구)의 실제 장소로만 구성된 하루 여행 코스를 만들어줘.
 
 📌 **입력 정보**
 - 사용자 요청: "${message}"
-- 현재 시간: ${time}
 - 현재 위치: ${location}
+- 행정구 기준: ${district}
+- 주변 지역 힌트: ${areaHint}
+- 시간: ${time}
 - 날씨: ${weather || "정보 없음"}
 
 📌 **코스 생성 원칙**
-1. **실제 장소명 필수**: "가로수길 카페" (X) → "앤트러사이트 가로수길점" (O)
-2. **시간대별 동선**: 10:00 출발 → 12:00 점심 → 14:00 카페 → 17:00 저녁 식으로 흐름 구성
-3. **지리적 효율성**: 강남 → 홍대 → 강남 이런 식으로 왔다갔다 하지 말고, 한 지역씩 돌기
-4. **현실적 체류**: 식사 1시간, 카페 40분, 관광지 1.5시간, 쇼핑 1시간
-5. **구체적 이동 정보**: "도보 10분", "지하철 2호선 강남역 → 홍대입구역 25분"
+1. 반드시 "${district}" 혹은 그 인근(${areaHint})의 실제 장소명만 포함할 것.
+2. "가로수길 카페"(X) → "앤트러사이트 가로수길점"(O)
+3. 시간대 순서대로 구성 (ex. 10시 출발 → 12시 점심 → 14시 카페)
+4. 구간 이동은 인접 지역 간 (ex. 도보 10분, 지하철 2호선 15분)
+5. 총 3~5개 장소, 총 소요시간 4~6시간.
+6. JSON만 반환. 코드블록( \`\`\` ) 절대 금지.
 
-📌 **실제 예시**
-❌ 나쁜 예: "가로수길의 감성적인 카페", "한남동 이탈리안 레스토랑"
-✅ 좋은 예: "연남토마 본점", "토속촌 삼계탕", "카페 온리", "성수동 대림창고"
-
-📌 **JSON 형식** (반드시 이 형식만 반환)
+📌 **JSON 형식**
 {
-  "title": "구체적 코스명 (예: 성수동 힙스터 카페 투어)",
-  "vibe": "분위기 (예: 감성 넘치는 브런치 & 카페 데이트)",
-  "route": "실제 장소명으로 연결 (예: 대림창고 → 어니언 성수 → 연남토마)",
+  "title": "코스명",
+  "vibe": "분위기",
+  "route": "장소명 → 장소명 → 장소명",
   "totalDuration": "총 소요 시간 (예: 5시간)",
   "spots": [
     {
-      "name": "실제 존재하는 장소명 (예: 카페 온리, 토속촌 삼계탕)",
+      "name": "실제 존재하는 장소명",
       "category": "카페|식당|관광지|쇼핑|문화공간",
-      "arriveTime": "도착 시간 (예: 10:30)",
-      "stayTime": "체류 시간 (예: 1시간)",
-      "desc": "왜 이 장소를 추천하는지 구체적으로 설명 (시그니처 메뉴, 분위기, 특징)",
-      "nextMove": "다음 장소로 이동 수단 (예: 도보 5분, 지하철 2호선 15분)"
+      "arriveTime": "10:30",
+      "stayTime": "1시간",
+      "desc": "추천 이유 (시그니처 메뉴, 분위기 등)",
+      "nextMove": "도보 10분, 지하철 2호선 등"
     }
   ]
 }
-
-⚠️ **필수 체크리스트**
-- [ ] 모든 name은 "XX 카페" 같은 일반명사가 아닌 **실제 가게명/장소명**
-- [ ] route는 실제 장소명을 → 로 연결
-- [ ] 시간은 ${time}부터 시작해서 순차적으로 증가
-- [ ] 지리적으로 가까운 장소끼리 묶음 (예: 성수동 3곳 → 한남동 2곳)
-- [ ] JSON만 반환, 코드 블록(\`\`\`) 절대 금지
 `;
 
+    // ✅ OpenAI 호출
     const res = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: message },
       ],
-      temperature: 0.7, 
+      temperature: 0.6,
     });
 
-    let course;
     const raw = res.choices[0].message.content ?? "{}";
+    let course;
 
     try {
       const clean = raw
@@ -94,18 +96,31 @@ export async function POST(req: Request) {
         .trim();
       course = JSON.parse(clean);
     } catch (err) {
-      console.error("⚠️ JSON parse error, raw content:", raw);
+      console.error("⚠️ JSON parse error:", raw);
       return NextResponse.json(
         { error: "AI 응답 파싱 실패", raw },
         { status: 500 }
       );
     }
 
-    
+    // ✅ 네이버 검색 결과로 실제 장소 검증
     const verifiedSpots = [];
     for (const s of course.spots) {
-      const naver = await searchNaver(s.name);
-      const item = naver.items?.[0];
+      const item = await searchNaver(s.name);
+
+      if (!item) {
+        console.warn(`❌ '${s.name}' 네이버 검색 결과 없음 — 제외`);
+        continue;
+      }
+
+      // ✅ 구 단위 주소 필터링
+      if (item.address && !item.address.includes(guName)) {
+        console.warn(
+          `🚫 '${s.name}' 주소(${item.address})가 ${guName}과 일치하지 않음 — 제외`
+        );
+        continue;
+      }
+
       verifiedSpots.push({
         name: s.name,
         category: s.category,
@@ -113,11 +128,19 @@ export async function POST(req: Request) {
         stayTime: s.stayTime,
         desc: s.desc,
         nextMove: s.nextMove,
-        address: item?.address ?? "주소 정보 없음",
-        link: item?.link ?? null,
+        address: item.address ?? "주소 정보 없음",
+        link: item.link ?? null,
       });
     }
 
+    if (verifiedSpots.length === 0) {
+      return NextResponse.json(
+        { error: `${district} 인근에서 유효한 장소를 찾지 못했습니다.` },
+        { status: 404 }
+      );
+    }
+
+    // ✅ DB 저장
     const saved = await db.course.create({
       data: {
         userId,

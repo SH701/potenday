@@ -30,8 +30,20 @@ export async function POST(req: Request) {
       messages: [
         {
           role: "system",
-          content:
-            "너는 사용자의 문장에서 장소 검색 키워드를 1~3개로 추출하는 어시스턴트야. 결과는 쉼표로 구분된 단어로만 출력해.",
+          content: `
+너는 사용자의 문장에서 장소 검색에 적합한 키워드만 1~3개 추출하는 어시스턴트야.
+결과는 쉼표로 구분된 단어로만 출력해.
+인사, 감탄사, 일반 대화(예: 안녕, 고마워, 좋아, 그래 등)는 무시하고,
+'지역명, 장소명, 음식종류, 활동명'과 같이 검색에 쓸만한 핵심 단어만 추출해.
+키워드가 없으면 아무것도 출력하지 마.
+
+예시:
+- 합정 맛집 추천해줘 → 합정,맛집
+- 카페 말고 음식점 → 음식점
+- 오늘 뭐해? → (출력 없음)
+- 광화문 쪽 카페 찾아줘 → 광화문,카페
+- 안녕? → (출력 없음)
+      `,
         },
         { role: "user", content: message },
       ],
@@ -66,7 +78,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       reply,
       persona: persona.name,
-      imagePath: persona.image, 
+      imagePath: persona.image,
     });
   } catch (error) {
     console.error("❌ Error:", error);

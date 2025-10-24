@@ -14,7 +14,7 @@ export default function GenerateCourseModal({
   onClose,
 }: GenerateCourseModalProps) {
   const [message, setMessage] = useState("");
-  const [location, setLocation] = useState("서울");
+  const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState<any | null>(null);
   const [time, setTime] = useState("");
@@ -28,7 +28,7 @@ export default function GenerateCourseModal({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message,
-          location: location.trim() || "서울",
+          location: location.trim() || "",
           time: time.trim() || "오후 3시",
           personaId: "ruby",
         }),
@@ -51,7 +51,7 @@ export default function GenerateCourseModal({
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] p-4">
       <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-auto shadow-2xl">
         {/* 헤더 */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl">
+        <div className="top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl">
           <div>
             <h2 className="text-xl font-bold text-gray-900">
               ✨ AI 하루 코스 생성기
