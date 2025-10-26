@@ -19,8 +19,6 @@ export default function Top({
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useUser();
-  const personaId =
-    (user?.publicMetadata?.personaId as string | undefined) ?? "ruby";
 
   const changeBot = () => {
     if (confirm("AI를 변경하시겠습니까?")) {

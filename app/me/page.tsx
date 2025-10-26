@@ -4,6 +4,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import BackButton from "@/components/etc/BackButton";
 import CourseCard from "@/components/course/CoureseCard";
 import StarDelete from "@/components/etc/StarDelete";
+import Move from "@/components/etc/Move";
 
 export default async function Me() {
   const user = await currentUser();
@@ -66,7 +67,7 @@ export default async function Me() {
                 <div className="flex items-center gap-2 mb-4">
                   <Star className="w-6 h-6 text-yellow-500 fill-yellow-400" />
                   <h2 className="text-xl font-bold text-gray-900">
-                    즐겨찾기 ({stars.length})
+                    내 장소 ({stars.length})
                   </h2>
                 </div>
                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -80,30 +81,19 @@ export default async function Me() {
                           <h3 className="text-lg font-bold text-gray-900 group-hover:text-purple-600 transition">
                             {star.title}
                           </h3>
-                          <Star
-                            className="w-5 h-5 text-yellow-400 fill-yellow-300"
-                            strokeWidth={1.5}
-                          />
+
                           <StarDelete placeId={star.placeId} />
                         </div>
                         <div className="flex flex-col ">
                           <p className="text-sm text-gray-600 mb-3">
                             {star.desc}
                           </p>
-                          <p className=" text-xs text-gray-500 mb-3">
-                            {star.time}
-                          </p>
+
                           <p className=" text-xs text-gray-500 mb-3">
                             {star.address}
                           </p>
                         </div>
-                        <div className="flex items-center gap-2 text-xs text-gray-400">
-                          <Clock className="w-4 h-4" />
-                          {new Date(star.createdAt).toLocaleString("ko-KR", {
-                            month: "short",
-                            day: "numeric",
-                          })}
-                        </div>
+                        <Move star={star} />
                       </div>
                       {/* 하단 구분선 */}
                       <div className="h-1 bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400"></div>
