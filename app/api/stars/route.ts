@@ -3,6 +3,8 @@ import { auth } from "@clerk/nextjs/server";
 import db from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
 export async function POST(request: Request) {
   try {
     const { userId } = await auth();
@@ -10,7 +12,34 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { placeId, title, desc, icon, time, price } = await request.json();
+    const requestBody = await request.json();
+    let { placeId, title, desc, icon, time, price, address } = requestBody;
+
+    if (!address && title) {
+      try {
+        const detailUrl = `${baseUrl}/api/place-detail?query=${encodeURIComponent(
+          title
+        )}&count=1`;
+
+        const detailResponse = await fetch(detailUrl, {});
+
+        if (detailResponse.ok) {
+          const detailData = await detailResponse.json();
+          const fetchedDetail = detailData.detail;
+
+          if (fetchedDetail) {
+            address = fetchedDetail.roadAddress || fetchedDetail.address;
+          }
+        } else {
+          console.error(
+            "❌ Failed to fetch place details from API:",
+            detailResponse.status
+          );
+        }
+      } catch (fetchError) {
+        console.error("🔥 Error during detail fetch:", fetchError);
+      }
+    }
 
     const star = await db.star.create({
       data: {
@@ -21,8 +50,10 @@ export async function POST(request: Request) {
         icon,
         time,
         price,
+        address,
       },
     });
+
     revalidatePath("/me");
     return NextResponse.json({ saved: true, star });
   } catch (error) {
@@ -55,7 +86,7 @@ export async function DELETE(request: Request) {
 
     return NextResponse.json({ saved: false });
   } catch (error) {
-    console.error("Error deleting star:", error); // ← 자세한 에러 로그
+    console.error("Error deleting star:", error);
     return NextResponse.json(
       {
         error: "Failed to delete",

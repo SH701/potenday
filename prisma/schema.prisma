@@ -68,7 +68,7 @@ model Star {
   icon      String?  
   time      String?
   price     String?
-
+  address String?
   createdAt DateTime @default(now())
 
   @@unique([userId, placeId]) 

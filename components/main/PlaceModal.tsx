@@ -19,7 +19,6 @@ interface NaverPlaceDetail {
   link: string;
   roadAddress: string;
   photos?: string[];
-
   photo?: string;
   rating?: number;
   reviewCount?: number;
@@ -148,21 +147,6 @@ export default function PlaceModal({
                   </div>
                 )}
 
-                {/* 전화번호 */}
-                {placeDetail.telephone && (
-                  <div className="bg-gray-50 rounded-xl p-4">
-                    <div className="flex items-center gap-3">
-                      <Phone className="w-5 h-5 text-purple-500 flex-shrink-0" />
-                      <a
-                        href={`tel:${placeDetail.telephone}`}
-                        className="font-medium text-gray-900 hover:text-purple-600 transition-colors"
-                      >
-                        {placeDetail.telephone}
-                      </a>
-                    </div>
-                  </div>
-                )}
-
                 {/* 카테고리 */}
                 {placeDetail.category && (
                   <div className="flex flex-wrap gap-2">
@@ -185,7 +169,7 @@ export default function PlaceModal({
                   className="flex items-center justify-center gap-2 w-full mt-6 px-6 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold hover:shadow-xl transition-all"
                 >
                   <ExternalLink className="w-5 h-5" />
-                  네이버에서 사진 · 리뷰 보기
+                  사진 · 리뷰 보기
                 </a>
               </div>
             ) : (

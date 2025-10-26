@@ -26,6 +26,7 @@ interface RecommendationItemProps {
     desc: string;
     time: string;
     price?: string;
+    address: string;
   };
   color: string;
   onClick: () => void;
@@ -83,15 +84,18 @@ export default function RecommendationItem({
           icon: item.icon,
           time: item.time,
           price: item.price || "",
+          address: item.address,
         }),
       });
+      const data = await response.json();
+      console.log("⭐ Save/Delete API Response Data:", data);
       router.refresh();
       if (!response.ok) {
-        setSaved(!newSavedState); // 실패시 롤백
+        setSaved(!newSavedState);
         console.error("Failed to save");
       }
     } catch (error) {
-      setSaved(!newSavedState); // 에러시 롤백
+      setSaved(!newSavedState);
       console.error("Error saving:", error);
     } finally {
       setIsLoading(false);

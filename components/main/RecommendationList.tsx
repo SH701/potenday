@@ -11,6 +11,7 @@ interface Recommendation {
   desc: string;
   time: string;
   price?: string;
+  address:string
 }
 
 interface RecommendationListProps {

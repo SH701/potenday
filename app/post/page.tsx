@@ -4,7 +4,7 @@ import Image from "next/image";
 import PostDate from "@/components/post/PostDate";
 import AddPost from "@/components/post/AddPost";
 import { currentUser } from "@clerk/nextjs/server";
-import Header from "@/components/Header";
+import Header from "@/components/post/Header";
 
 interface Props {
   searchParams: Promise<{ page?: string }>;

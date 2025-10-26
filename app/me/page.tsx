@@ -1,8 +1,9 @@
 import db from "@/lib/db";
-import { Star, Clock, FolderHeart, MapPin, Route } from "lucide-react";
+import { Star, Clock, FolderHeart, Route } from "lucide-react";
 import { currentUser } from "@clerk/nextjs/server";
 import BackButton from "@/components/etc/BackButton";
 import CourseCard from "@/components/course/CoureseCard";
+import StarDelete from "@/components/etc/StarDelete";
 
 export default async function Me() {
   const user = await currentUser();
@@ -83,16 +84,24 @@ export default async function Me() {
                             className="w-5 h-5 text-yellow-400 fill-yellow-300"
                             strokeWidth={1.5}
                           />
+                          <StarDelete placeId={star.placeId} />
                         </div>
-
+                        <div className="flex flex-col ">
+                          <p className="text-sm text-gray-600 mb-3">
+                            {star.desc}
+                          </p>
+                          <p className=" text-xs text-gray-500 mb-3">
+                            {star.time}
+                          </p>
+                          <p className=" text-xs text-gray-500 mb-3">
+                            {star.address}
+                          </p>
+                        </div>
                         <div className="flex items-center gap-2 text-xs text-gray-400">
                           <Clock className="w-4 h-4" />
                           {new Date(star.createdAt).toLocaleString("ko-KR", {
-                            year: "numeric",
                             month: "short",
                             day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
                           })}
                         </div>
                       </div>

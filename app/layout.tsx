@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ClerkProvider, SignedIn } from "@clerk/nextjs";
-import SyncUser from "@/components/SyncUser";
+import SyncUser from "@/components/etc/SyncUser";
 
 export const metadata: Metadata = {
   title: "SeoulCourse",

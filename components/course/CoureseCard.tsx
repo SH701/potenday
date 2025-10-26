@@ -20,7 +20,7 @@ export default function CourseCard({ course }: CourseCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async (e: React.MouseEvent) => {
-    e.preventDefault(); // Link 클릭 방지
+    e.preventDefault();
     e.stopPropagation();
 
     if (!confirm("정말 이 코스를 삭제하시겠습니까?")) return;
@@ -32,7 +32,7 @@ export default function CourseCard({ course }: CourseCardProps) {
       });
 
       if (res.ok) {
-        router.refresh(); // 페이지 새로고침
+        router.refresh();
       } else {
         const data = await res.json();
         alert("삭제 실패: " + (data.error || "알 수 없는 오류"));
