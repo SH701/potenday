@@ -18,6 +18,7 @@ export default function GenerateCourseModal({
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState<any | null>(null);
   const [time, setTime] = useState("");
+  const [saving, setSaving] = useState(false);
 
   const handleGenerate = async () => {
     if (!message.trim()) return;
@@ -44,7 +45,39 @@ export default function GenerateCourseModal({
       setLoading(false);
     }
   };
+  const saved = async () => {
+    if (!course) return;
 
+    setSaving(true);
+    try {
+      const res = await fetch("/api/course/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: course.title,
+          vibe: course.vibe,
+          route: course.route,
+          totalDuration: course.totalDuration,
+          spots: course.spots,
+          personaId: "ruby",
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("✅ 코스가 저장되었습니다!");
+        onClose();
+      } else {
+        alert("❌ 저장에 실패했습니다: " + (data.error || "알 수 없는 오류"));
+      }
+    } catch (err) {
+      console.error(err);
+      alert("❌ 저장 중 오류가 발생했습니다.");
+    } finally {
+      setSaving(false);
+    }
+  };
   if (!isOpen) return null;
 
   const modal = (
@@ -139,7 +172,17 @@ export default function GenerateCourseModal({
                     <div className="absolute -left-[26px] top-2 w-5 h-5 rounded-full bg-white border-4 border-purple-400 shadow-md"></div>
 
                     {/* 카드 */}
-                    <div className="bg-white rounded-xl p-5 shadow-md hover:shadow-lg transition border border-gray-100">
+                    <div
+                      className="bg-white rounded-xl p-5 shadow-md hover:shadow-lg transition border border-gray-100 cursor-pointer"
+                      onClick={() =>
+                        window.open(
+                          `https://map.naver.com/v5/search/${encodeURIComponent(
+                            spot.name.replace(/<[^>]*>/g, "")
+                          )}`,
+                          "_blank"
+                        )
+                      }
+                    >
                       {/* 시간 & 카테고리 */}
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
@@ -191,11 +234,15 @@ export default function GenerateCourseModal({
                   </div>
                 ))}
               </div>
-
-              <button className="w-full py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition font-medium">
-                💾 이 코스 저장하기
-              </button>
             </div>
+          )}
+          {course && (
+            <button
+              className="w-full py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition font-medium"
+              onClick={saved}
+            >
+              💾 이 코스 저장하기
+            </button>
           )}
         </div>
       </div>

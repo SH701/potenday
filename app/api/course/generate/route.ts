@@ -6,7 +6,6 @@ import { famousgu } from "@/lib/gudata";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// ✅ 네이버 지역 검색
 async function searchNaver(query: string) {
   const res = await fetch(
     `https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(
@@ -23,6 +22,16 @@ async function searchNaver(query: string) {
   return data.items?.[0] || null;
 }
 
+function extractRegionFromMessage(message: string): string | null {
+  const regions = Object.keys(famousgu);
+  for (const region of regions) {
+    if (message.includes(region)) {
+      return region;
+    }
+  }
+  return null;
+}
+
 export async function POST(req: Request) {
   try {
     const { userId } = await auth();
@@ -31,20 +40,24 @@ export async function POST(req: Request) {
 
     const { message, weather, time, location, personaId } = await req.json();
 
-    // ✅ location 기반으로 구/인근 지역 자동 인식
-    const guName =
-      Object.keys(famousgu).find((gu) => location.includes(gu)) || location;
-    const areaHint = famousgu[guName as keyof typeof famousgu] || location;
-    const district = `${guName}구`;
+    const requestedRegion = extractRegionFromMessage(message);
 
-    // ✅ system prompt
+    const targetRegion =
+      requestedRegion ||
+      Object.keys(famousgu).find((gu) => location.includes(gu)) ||
+      location;
+
+    const areaHint =
+      famousgu[targetRegion as keyof typeof famousgu] || targetRegion;
+    const district = `${targetRegion}구`;
+
     const systemPrompt = `
 너는 서울 여행 전문 도슨트야. 사용자의 요청에 따라 "${district}" 인근(같은 구 또는 인접 구)의 실제 장소로만 구성된 하루 여행 코스를 만들어줘.
 
 📌 **입력 정보**
 - 사용자 요청: "${message}"
 - 현재 위치: ${location}
-- 행정구 기준: ${district}
+- **코스 목적지**: ${district}
 - 주변 지역 힌트: ${areaHint}
 - 시간: ${time}
 - 날씨: ${weather || "정보 없음"}
@@ -65,7 +78,7 @@ export async function POST(req: Request) {
   "totalDuration": "총 소요 시간 (예: 5시간)",
   "spots": [
     {
-      "name": "실제 존재하는 장소명",
+      "name": "실제 존재하는 장소명 (반드시 ${district} 또는 ${areaHint} 지역)",
       "category": "카페|식당|관광지|쇼핑|문화공간",
       "arriveTime": "10:30",
       "stayTime": "1시간",
@@ -76,7 +89,6 @@ export async function POST(req: Request) {
 }
 `;
 
-    // ✅ OpenAI 호출
     const res = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
@@ -103,23 +115,9 @@ export async function POST(req: Request) {
       );
     }
 
-    // ✅ 네이버 검색 결과로 실제 장소 검증
     const verifiedSpots = [];
     for (const s of course.spots) {
       const item = await searchNaver(s.name);
-
-      if (!item) {
-        console.warn(`❌ '${s.name}' 네이버 검색 결과 없음 — 제외`);
-        continue;
-      }
-
-      // ✅ 구 단위 주소 필터링
-      if (item.address && !item.address.includes(guName)) {
-        console.warn(
-          `🚫 '${s.name}' 주소(${item.address})가 ${guName}과 일치하지 않음 — 제외`
-        );
-        continue;
-      }
 
       verifiedSpots.push({
         name: s.name,
@@ -140,19 +138,15 @@ export async function POST(req: Request) {
       );
     }
 
-    // ✅ DB 저장
-    const saved = await db.course.create({
-      data: {
-        userId,
-        personaId,
-        title: course.title,
-        vibe: course.vibe,
-        spots: verifiedSpots,
-      },
-    });
+    const generatedCourse = {
+      title: course.title,
+      vibe: course.vibe,
+      route: course.route,
+      totalDuration: course.totalDuration,
+      spots: verifiedSpots,
+    };
 
-    console.log("✅ Course created:", saved.id);
-    return NextResponse.json({ course: saved });
+    return NextResponse.json({ course: generatedCourse });
   } catch (error) {
     console.error("❌ Error generating course:", error);
     return NextResponse.json(

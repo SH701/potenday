@@ -86,7 +86,7 @@ export default function GuPage({ params }: { params: { id: string } }) {
       });
     }
   }, [recommendations]);
-  // 로딩 상태
+
   if (loading)
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50">
@@ -97,7 +97,7 @@ export default function GuPage({ params }: { params: { id: string } }) {
       </div>
     );
 
-  // 에러 상태
+
   if (error)
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-pink-50">
@@ -115,7 +115,6 @@ export default function GuPage({ params }: { params: { id: string } }) {
       </div>
     );
 
-  // 결과 없음
   if (!recommendations.length)
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
