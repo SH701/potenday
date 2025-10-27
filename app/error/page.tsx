@@ -17,7 +17,7 @@ export default function Error() {
           로그인 후 이용할 수 있습니다
         </h1>
         <p className="text-sm sm:text-base text-gray-600 mb-6">
-          저장 목록과 게시글 기능은 로그인한 사용자만 접근 가능합니다.
+          계속해서 서비스를 이용하시려면 로그인해주세요.
         </p>
 
         <button
@@ -28,10 +28,6 @@ export default function Error() {
           로그인하러 가기
         </button>
       </div>
-
-      <p className="mt-6 text-xs text-gray-400">
-        계속해서 서비스를 이용하시려면 로그인해주세요.
-      </p>
     </main>
   );
 }

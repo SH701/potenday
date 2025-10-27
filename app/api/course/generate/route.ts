@@ -1,33 +1,37 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { auth } from "@clerk/nextjs/server";
-import db from "@/lib/db";
 import { famousgu } from "@/lib/gudata";
+import { cookies } from "next/headers";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const MAX_GUEST = 3;
 
 async function searchNaver(query: string) {
-  const res = await fetch(
-    `https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(
-      query
-    )}&display=1`,
-    {
-      headers: {
-        "X-Naver-Client-Id": process.env.NAVER_CLIENT_ID!,
-        "X-Naver-Client-Secret": process.env.NAVER_CLIENT_SECRET!,
-      },
-    }
-  );
-  const data = await res.json();
-  return data.items?.[0] || null;
+  try {
+    const res = await fetch(
+      `https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(
+        query
+      )}&display=1`,
+      {
+        headers: {
+          "X-Naver-Client-Id": process.env.NAVER_CLIENT_ID!,
+          "X-Naver-Client-Secret": process.env.NAVER_CLIENT_SECRET!,
+        },
+      }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.items?.[0] ?? null;
+  } catch {
+    return null;
+  }
 }
 
-function extractRegionFromMessage(message: string): string | null {
-  const regions = Object.keys(famousgu);
-  for (const region of regions) {
-    if (message.includes(region)) {
-      return region;
-    }
+function extractRegionFromMessage(message: string | undefined): string | null {
+  if (!message) return null;
+  for (const region of Object.keys(famousgu)) {
+    if (message.includes(region)) return region;
   }
   return null;
 }
@@ -35,61 +39,76 @@ function extractRegionFromMessage(message: string): string | null {
 export async function POST(req: Request) {
   try {
     const { userId } = await auth();
-    if (!userId)
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const cookieStore = cookies();
 
-    const { message, weather, time, location, personaId } = await req.json();
+    const body = await req.json();
+    const message: string = String(body.message ?? "").trim();
+    const weather: string = body.weather ?? "";
+    const time: string = body.time ?? "";
+    const location: string = String(body.location ?? "").trim();
+
+    if (!message)
+      return NextResponse.json({ error: "message required" }, { status: 400 });
+
+    // 익명 쿼터 체크
+    const rawCount = cookieStore.get("guest_created_count")?.value;
+    const count = rawCount ? parseInt(rawCount, 10) : 0;
+    if (!userId && count >= MAX_GUEST) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "guest_limit",
+          guestRemaining: 0,
+          message: "로그인 필요",
+        },
+        { status: 401 }
+      );
+    }
 
     const requestedRegion = extractRegionFromMessage(message);
-
+    const foundFromLocation =
+      location && Object.keys(famousgu).find((gu) => location.includes(gu));
     const targetRegion =
       requestedRegion ||
-      Object.keys(famousgu).find((gu) => location.includes(gu)) ||
-      location;
+      foundFromLocation ||
+      location ||
+      Object.keys(famousgu)[0];
 
     const areaHint =
       famousgu[targetRegion as keyof typeof famousgu] || targetRegion;
-    const district = `${targetRegion}구`;
+    const district = targetRegion?.endsWith("구")
+      ? targetRegion
+      : `${targetRegion}구`;
 
     const systemPrompt = `
 너는 서울 여행 전문 도슨트야. 사용자의 요청에 따라 "${district}" 인근(같은 구 또는 인접 구)의 실제 장소로만 구성된 하루 여행 코스를 만들어줘.
 
-📌 **입력 정보**
+입력:
 - 사용자 요청: "${message}"
-- 현재 위치: ${location}
-- **코스 목적지**: ${district}
-- 주변 지역 힌트: ${areaHint}
-- 시간: ${time}
+- 현재 위치: ${location || "정보 없음"}
+- 목적지: ${district}
+- 주변 힌트: ${areaHint}
+- 시간: ${time || "정보 없음"}
 - 날씨: ${weather || "정보 없음"}
 
-📌 **코스 생성 원칙**
-1. 반드시 "${district}" 혹은 그 인근(${areaHint})의 실제 장소명만 포함할 것.
-2. "가로수길 카페"(X) → "앤트러사이트 가로수길점"(O)
-3. 시간대 순서대로 구성 (ex. 10시 출발 → 12시 점심 → 14시 카페)
-4. 구간 이동은 인접 지역 간 (ex. 도보 10분, 지하철 2호선 15분)
-5. 총 3~5개 장소, 총 소요시간 4~6시간.
-6. JSON만 반환. 코드블록( \`\`\` ) 절대 금지.
+원칙:
+1) 반드시 "${district}" 또는 인접(${areaHint})의 실제 장소명만 사용.
+2) 시간 순으로 3~5개 장소, 총 소요 4~6시간.
+3) JSON만 반환. 코드블록 금지.
 
-📌 **JSON 형식**
+형식:
 {
-  "title": "코스명",
-  "vibe": "분위기",
-  "route": "장소명 → 장소명 → 장소명",
-  "totalDuration": "총 소요 시간 (예: 5시간)",
+  "title": "...",
+  "vibe": "...",
+  "route": "...",
+  "totalDuration": "...",
   "spots": [
-    {
-      "name": "실제 존재하는 장소명 (반드시 ${district} 또는 ${areaHint} 지역)",
-      "category": "카페|식당|관광지|쇼핑|문화공간",
-      "arriveTime": "10:30",
-      "stayTime": "1시간",
-      "desc": "추천 이유 (시그니처 메뉴, 분위기 등)",
-      "nextMove": "도보 10분, 지하철 2호선 등"
-    }
+    { "name":"...", "category":"카페|식당|관광지|쇼핑|문화공간", "arriveTime":"", "stayTime":"", "desc":"", "nextMove":"" }
   ]
 }
 `;
 
-    const res = await openai.chat.completions.create({
+    const aiRes = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
         { role: "system", content: systemPrompt },
@@ -98,40 +117,56 @@ export async function POST(req: Request) {
       temperature: 0.6,
     });
 
-    const raw = res.choices[0].message.content ?? "{}";
-    let course;
+    const raw = aiRes.choices?.[0]?.message?.content ?? "{}";
+    const stripped = raw
+      .replace(/```json/gi, "")
+      .replace(/```/g, "")
+      .trim();
+    const match = stripped.match(/\{[\s\S]*\}/);
+    const jsonText = match ? match[0] : stripped;
 
+    let course;
     try {
-      const clean = raw
-        .replace(/```json/i, "")
-        .replace(/```/g, "")
-        .trim();
-      course = JSON.parse(clean);
+      course = JSON.parse(jsonText);
     } catch (err) {
-      console.error("⚠️ JSON parse error:", raw);
+      console.error("JSON parse error:", raw);
       return NextResponse.json(
         { error: "AI 응답 파싱 실패", raw },
         { status: 500 }
       );
     }
 
-    const verifiedSpots = [];
-    for (const s of course.spots) {
-      const item = await searchNaver(s.name);
-
-      verifiedSpots.push({
-        name: s.name,
-        category: s.category,
-        arriveTime: s.arriveTime,
-        stayTime: s.stayTime,
-        desc: s.desc,
-        nextMove: s.nextMove,
-        address: item.address ?? "주소 정보 없음",
-        link: item.link ?? null,
-      });
+    if (!course || !Array.isArray(course.spots) || course.spots.length === 0) {
+      return NextResponse.json(
+        { error: "코스 스팟이 없습니다." },
+        { status: 400 }
+      );
     }
 
-    if (verifiedSpots.length === 0) {
+    const verifiedSpots = await Promise.all(
+      course.spots.map(async (s: any) => {
+        const name = String(s.name ?? "").trim();
+        if (!name) {
+          return { ...s, address: "주소 정보 없음", link: null };
+        }
+        const item = await searchNaver(name);
+        return {
+          name,
+          category: s.category ?? null,
+          arriveTime: s.arriveTime ?? null,
+          stayTime: s.stayTime ?? null,
+          desc: s.desc ?? null,
+          nextMove: s.nextMove ?? null,
+          address: item?.address ?? "주소 정보 없음",
+          link: item?.link ?? null,
+        };
+      })
+    );
+
+    const anyValid = verifiedSpots.some(
+      (v) => v.address !== "주소 정보 없음" || v.link
+    );
+    if (!anyValid) {
       return NextResponse.json(
         { error: `${district} 인근에서 유효한 장소를 찾지 못했습니다.` },
         { status: 404 }
@@ -139,16 +174,36 @@ export async function POST(req: Request) {
     }
 
     const generatedCourse = {
-      title: course.title,
-      vibe: course.vibe,
-      route: course.route,
-      totalDuration: course.totalDuration,
+      title: course.title ?? `${district} 하루 코스`,
+      vibe: course.vibe ?? "",
+      route: course.route ?? verifiedSpots.map((p) => p.name).join(" → "),
+      totalDuration: course.totalDuration ?? "",
       spots: verifiedSpots,
     };
 
-    return NextResponse.json({ course: generatedCourse });
+    if (userId) {
+      return NextResponse.json({
+        ok: true,
+        guestRemaining: null,
+        course: generatedCourse,
+      });
+    }
+
+    const newCount = count + 1;
+    const maxAge = 60 * 60 * 24 * 365;
+    const secureFlag = process.env.NODE_ENV === "production" ? "Secure; " : "";
+    const res = NextResponse.json({
+      ok: true,
+      guestRemaining: Math.max(0, MAX_GUEST - newCount),
+      course: generatedCourse,
+    });
+    res.headers.append(
+      "Set-Cookie",
+      `guest_created_count=${newCount}; Path=/; Max-Age=${maxAge}; HttpOnly; ${secureFlag}SameSite=Lax`
+    );
+    return res;
   } catch (error) {
-    console.error("❌ Error generating course:", error);
+    console.error("Error generating course:", error);
     return NextResponse.json(
       { error: "Failed to generate course" },
       { status: 500 }
