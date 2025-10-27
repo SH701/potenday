@@ -38,7 +38,7 @@ export async function GET(
     const categoryKeywords = {
       cafe: ["카페", "베이커리", "디저트"],
       restaurant: ["맛집", "레스토랑", "식당"],
-      attraction: ["명소", "관광지", "공원"],
+      attraction: ["놀거리", "관광지", "공원"],
     };
 
     const selectedCategory =

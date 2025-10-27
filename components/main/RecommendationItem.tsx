@@ -87,8 +87,6 @@ export default function RecommendationItem({
           address: item.address,
         }),
       });
-      const data = await response.json();
-      console.log("⭐ Save/Delete API Response Data:", data);
       router.refresh();
       if (!response.ok) {
         setSaved(!newSavedState);
@@ -104,7 +102,7 @@ export default function RecommendationItem({
 
   return (
     <div
-      className="group flex items-center gap-6 p-6 rounded-2xl border-2 border-gray-100 hover:border-purple-300 hover:shadow-lg transition-all cursor-pointer"
+      className="group flex items-center gap-6 sm:p-6 px-3 py-2 rounded-2xl border-2 border-gray-100 hover:border-purple-300 hover:shadow-lg transition-all cursor-pointer relative"
       onClick={onClick}
     >
       <div
@@ -114,18 +112,18 @@ export default function RecommendationItem({
         <IconComponent className="w-8 h-8" style={{ color }} />
       </div>
       <div className="flex-1">
-        <div className="flex items-center gap-2 mb-2">
-          <h4 className="sm:text-xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors ">
+        <div className="flex items-center my-2">
+          <h4 className="sm:text-xl font-bold text-[15px] truncate text-gray-900 group-hover:text-purple-600 transition-colors ">
             {item.title}
           </h4>
           <button
             onClick={save}
             disabled={isLoading}
-            className="ml-auto p-1 hover:scale-110 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
+            className="ml-auto p-1  transition-transform disabled:opacity-50 disabled:cursor-not-allowed absolute sm:static right-3"
             aria-label={saved ? "Unsave" : "Save"}
           >
             <Star
-              className={`w-5 h-5 transition-colors ${
+              className={`size-5 transition-colors ${
                 saved
                   ? "fill-yellow-400 text-yellow-400"
                   : "text-gray-300 hover:text-yellow-400"

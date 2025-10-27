@@ -1,5 +1,5 @@
 import db from "@/lib/db";
-import { Star, Clock, FolderHeart, Route } from "lucide-react";
+import { Star, FolderHeart, Route } from "lucide-react";
 import { currentUser } from "@clerk/nextjs/server";
 import BackButton from "@/components/etc/BackButton";
 import CourseCard from "@/components/course/CoureseCard";

@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MapPin, Clock, AlertCircle, ImageIcon, MoveLeft } from "lucide-react";
+import { MapPin, Clock, AlertCircle, ImageIcon } from "lucide-react";
 import { guData } from "@/lib/gudata";
 import { useRouter } from "next/navigation";
+import BackButton from "@/components/etc/BackButton";
 
 interface Recommendation {
   title: string;
@@ -18,15 +19,15 @@ type CategoryType = "cafe" | "restaurant" | "attraction";
 
 const categoryInfo = {
   cafe: {
-    label: "카페/베이커리",
+    label: "카페",
     color: "from-purple-500 to-pink-500",
   },
   restaurant: {
-    label: "식당/레스토랑",
+    label: "식당",
     color: "from-pink-500 to-red-500",
   },
   attraction: {
-    label: "여행지/놀거리",
+    label: "놀거리",
     color: "from-purple-600 to-blue-500",
   },
 };
@@ -97,7 +98,6 @@ export default function GuPage({ params }: { params: { id: string } }) {
       </div>
     );
 
-
   if (error)
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-pink-50">
@@ -133,21 +133,24 @@ export default function GuPage({ params }: { params: { id: string } }) {
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 py-8 px-4">
       <div className="max-w-6xl mx-auto">
-        <div className="flex gap-3 mb-10 justify-center">
-          <button onClick={() => router.push("/main")} className="text-left">
-            <MoveLeft className="text-purple-600" />
+        <div className="flex gap-6 mb-10 justify-center items-center">
+          <button
+            onClick={() => router.push("/main")}
+            className="absolute left-8"
+          >
+            <BackButton />
           </button>
           {(Object.keys(categoryInfo) as CategoryType[]).map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-6 py-3 rounded-full font-medium text-sm transition-all ${
+              className={`p-3 rounded-full font-medium text-sm transition-all ${
                 activeCategory === cat
                   ? `bg-gradient-to-r ${categoryInfo[cat].color} text-white shadow-lg`
                   : "bg-white text-purple-600 border-2 border-purple-200"
               }`}
             >
-              {categoryInfo[cat].label}
+              <p className="font-semibold">{categoryInfo[cat].label}</p>
             </button>
           ))}
         </div>
@@ -161,9 +164,9 @@ export default function GuPage({ params }: { params: { id: string } }) {
         </div>
 
         {/* 대표 추천 */}
-        <div className="bg-gradient-to-br from-purple-100 to-pink-100 rounded-3xl p-6 mb-6 shadow-lg">
+        <div className="bg-gradient-to-br from-purple-100 to-pink-100 rounded-3xl sm:p-6 mb-6 shadow-lg">
           <div className="flex flex-col md:flex-row gap-6 items-center">
-            <div className="w-full md:w-1/2 overflow-hidden rounded-2xl shadow-lg">
+            <div className="w-full md:w-1/2 overflow-hidden rounded-2xl shadow-lg ">
               {photos[main.title.replace(/<[^>]*>/g, "")] ? (
                 <img
                   src={photos[main.title.replace(/<[^>]*>/g, "")]!}
@@ -177,18 +180,18 @@ export default function GuPage({ params }: { params: { id: string } }) {
               )}
             </div>
 
-            <div className="w-full md:w-1/2">
+            <div className="w-full md:w-1/2 px-5 pb-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 {main.title.replace(/<[^>]*>/g, "")}
               </h2>
               <p className="text-gray-600 mb-3">{main.keyword}</p>
-              <div className="flex items-start gap-2 text-gray-700 mb-1">
+              <div className="flex items-start gap-2 text-gray-700 mb-3">
                 <MapPin className="w-4 h-4 text-purple-600 mt-1" />
-                <span>{main.address}</span>
+                <span className="text-base truncate">{main.address}</span>
               </div>
               <div className="flex items-center gap-2 text-gray-700">
                 <Clock className="w-4 h-4 text-purple-600" />
-                <span>{main.category}</span>
+                <span className="text-sm">{main.category}</span>
               </div>
               <button
                 onClick={() =>
