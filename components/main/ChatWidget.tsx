@@ -98,7 +98,7 @@ export default function ChatWidget() {
 
       {/* 채팅창 */}
       {isOpen && (
-        <div className="fixed bottom-24 right-4 left-4 h-[600px] sm:inset-auto sm:bottom-32 sm:right-16 sm:w-[400px] sm:h-[600px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col z-50">
+        <div className="fixed bottom-24 right-4 left-4 h-[65vh] sm:inset-auto sm:bottom-32 sm:right-16 sm:w-[400px] sm:h-[600px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col z-50">
           {/* 헤더 */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
             <div className="flex items-center gap-3">
@@ -144,7 +144,7 @@ export default function ChatWidget() {
             </button>
           </div>
 
-          <div className="flex-1 p-4 space-y-3 overflow-y-auto">
+          <div className="flex-1 p-4 space-y-3 overflow-y-auto ">
             {messages.map((m, i) => (
               <div
                 key={i}
