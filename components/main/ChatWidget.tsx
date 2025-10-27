@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, ArrowUp } from "lucide-react";
 import Image from "next/image";
 import { personas } from "@/lib/persona";
 
@@ -181,15 +181,24 @@ export default function ChatWidget() {
               e.preventDefault();
               handleSend();
             }}
-            className="p-4 border-t border-gray-200"
+            className=" pl-2 border-t border-gray-200 bg-gray-100 rounded-xl flex"
           >
             <input
               type="text"
               value={message}
               placeholder="예: 합정 카페 추천해줘, 강남 맛집 추천해줘"
               onChange={(e) => setMessage(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+              className="w-full px-4 py-3 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-0"
             />
+            <button
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSend();
+              }}
+              className="bg-purple-500 text-white p-3 rounded-full "
+            >
+              <ArrowUp />
+            </button>
           </form>
         </div>
       )}
