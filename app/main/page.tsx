@@ -9,12 +9,8 @@ import RecommendationList from "@/components/main/RecommendationList";
 import EmptyState from "@/components/main/EmptyState";
 import PlaceModal from "@/components/main/PlaceModal";
 import HotPlaces from "@/components/main/HotPlaces";
-
-interface WeatherData {
-  main: {
-    temp: number;
-  };
-}
+import { useRecommendations } from "@/features/recommendations/queries/useRecommendations";
+import { useWeather } from "@/features/weather/queries/useWeather";
 
 export interface Recommendation {
   placeId: string;
@@ -30,32 +26,14 @@ export default function Home() {
     null
   );
   const [hoveredGu, setHoveredGu] = useState<string | null>(null);
-  const [recommendations, setRecommendations] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
-  const [weather, setWeather] = useState<WeatherData | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Recommendation | null>(null);
 
-  useEffect(() => {
-    if (!selectedGu) return;
-
-    setLoading(true);
-    fetch(`/api/recommendations/${selectedGu.id}`)
-      .then((res) => res.json())
-      .then((data) => setRecommendations(data.recommendations || []))
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  }, [selectedGu]);
-
-  useEffect(() => {
-    if (!selectedGu) return;
-
-    fetch(`/api/weather/${selectedGu.name}`)
-      .then((res) => res.json())
-      .then((data) => setWeather(data))
-      .catch((err) => console.error("날씨 불러오기 실패:", err));
-  }, [selectedGu]);
+  const { data: recommendations = [], isLoading } = useRecommendations(
+    selectedGu?.id || ""
+  );
+  const { data: weather } = useWeather(selectedGu?.name || "");
 
   const handleItemClick = (item: Recommendation) => {
     setSelectedItem(item);
@@ -109,7 +87,7 @@ export default function Home() {
             />
             <RecommendationList
               recommendations={recommendations}
-              loading={loading}
+              loading={isLoading}
               selectedGuId={selectedGu.id}
               selectedGuColor={selectedGu.color}
               onItemClick={handleItemClick}

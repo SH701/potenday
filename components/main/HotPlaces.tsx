@@ -2,12 +2,29 @@
 
 import { TrendingUp, ImageIcon } from "lucide-react";
 import { useHotPlaces } from "@/features/hotplaces/queries/useHotPlaces";
-import { usePlacePhoto } from "@/features/hotplaces/queries/usePlacePhoto";
 
 interface Place {
   rank: number;
   name: string;
   tag: string;
+}
+
+function PlaceCard({ place }: { place: Place }) {
+  return (
+    <div className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl overflow-hidden p-0 hover:bg-white/20 transition-colors cursor-pointer">
+      <div className="p-4 sm:p-5 lg:p-6">
+        <div className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3">
+          #{place.rank}
+        </div>
+        <div className="text-base sm:text-lg font-semibold mb-1 sm:mb-2 line-clamp-1">
+          {place.name}
+        </div>
+        <div className="text-xs sm:text-sm text-white/80 line-clamp-1">
+          {place.tag}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function HotPlaces({ gu }: { gu: string }) {
@@ -40,43 +57,9 @@ export default function HotPlaces({ gu }: { gu: string }) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
-        {places.map((p) => {
-          const title = p.name;
-          const { data: photo } = usePlacePhoto(title);
-
-          return (
-            <div
-              key={p.rank}
-              className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl overflow-hidden p-0 hover:bg-white/20 transition-colors cursor-pointer"
-            >
-              {/* 🔥 사진 영역 */}
-              {photo ? (
-                <img
-                  src={photo}
-                  alt={title}
-                  className="w-full h-40 object-cover"
-                />
-              ) : (
-                <div className="w-full h-40 bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
-                  <ImageIcon className="w-10 h-10 text-purple-400" />
-                </div>
-              )}
-
-              {/* 텍스트 영역 */}
-              <div className="p-4 sm:p-5 lg:p-6">
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3">
-                  #{p.rank}
-                </div>
-                <div className="text-base sm:text-lg font-semibold mb-1 sm:mb-2 line-clamp-1">
-                  {title}
-                </div>
-                <div className="text-xs sm:text-sm text-white/80 line-clamp-1">
-                  {p.tag}
-                </div>
-              </div>
-            </div>
-          );
-        })}
+        {places.map((place) => (
+          <PlaceCard key={place.rank} place={place} />
+        ))}
       </div>
     </>
   );

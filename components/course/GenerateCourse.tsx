@@ -365,7 +365,7 @@ export default function GenerateCourseModal({
             </p>
 
             <button
-              onClick={() => router.push("/sign-in")}
+              onClick={() => router.push("/")}
               className="flex items-center justify-center gap-2 w-full bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 rounded-xl transition"
             >
               <LogIn className="w-5 h-5" />

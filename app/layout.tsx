@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ClerkProvider, SignedIn } from "@clerk/nextjs";
 import SyncUser from "@/components/etc/SyncUser";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "SeoulCourse",
@@ -17,10 +18,12 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="ko">
         <body className={` antialiased `}>
-          <SignedIn>
-            <SyncUser />
-          </SignedIn>
-          {children}
+          <Providers>
+            <SignedIn>
+              <SyncUser />
+            </SignedIn>
+            {children}
+          </Providers>
         </body>
       </html>
     </ClerkProvider>
