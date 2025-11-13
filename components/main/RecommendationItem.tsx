@@ -1,5 +1,6 @@
 "use client";
 
+import { getTodayKey } from "@/lib/date";
 import {
   Coffee,
   Camera,
@@ -47,6 +48,18 @@ export default function RecommendationItem({
         const finalPlaceId =
           item.placeId || item.title.replace(/\s+/g, "-").toLowerCase();
 
+        const today = getTodayKey();
+        const cacheKey = `saved-${finalPlaceId}`;
+        const dateKey = `saved-date-${finalPlaceId}`;
+
+        const cachedValue = localStorage.getItem(cacheKey);
+        const cachedDate = localStorage.getItem(dateKey);
+
+        if (cachedValue !== null && cachedDate === today) {
+          setSaved(cachedValue === "true");
+          return;
+        }
+
         const response = await fetch("/api/stars/check", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -54,6 +67,9 @@ export default function RecommendationItem({
         });
         const data = await response.json();
         setSaved(data.saved);
+
+        localStorage.setItem(cacheKey, String(data.saved));
+        localStorage.setItem(dateKey, today);
       } catch (error) {
         console.error("Failed to check saved status:", error);
       }

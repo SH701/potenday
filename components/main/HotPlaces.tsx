@@ -1,49 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, ImageIcon } from "lucide-react";
+import { useHotPlaces } from "@/features/hotplaces/queries/useHotPlaces";
+import { usePlacePhoto } from "@/features/hotplaces/queries/usePlacePhoto";
 
 interface Place {
   rank: number;
   name: string;
   tag: string;
-  places?: {
-    title: string;
-    address: string;
-    link: string;
-  }[];
 }
 
 export default function HotPlaces({ gu }: { gu: string }) {
-  const [places, setPlaces] = useState<Place[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, isLoading, error } = useHotPlaces(gu);
 
-  useEffect(() => {
-    if (!gu) return;
-
-    const fetchHotPlaces = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`/api/hot-places?gu=${gu}`);
-        const data = await res.json();
-        setPlaces(data);
-      } catch (err) {
-        console.error("🔥 HotPlaces fetch error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchHotPlaces();
-  }, [gu]);
-
-  if (loading)
+  if (isLoading)
     return (
       <div className="text-center py-8 text-white/80">
         <div className="animate-spin w-8 h-8 border-4 border-white border-t-transparent rounded-full mx-auto mb-3"></div>
         {gu}의 인기 장소를 불러오는 중...
       </div>
     );
+
+  if (error)
+    return (
+      <div className="text-center py-8 text-red-300">
+        데이터를 불러오지 못했습니다.
+      </div>
+    );
+
+  const places: Place[] = data ?? [];
 
   return (
     <>
@@ -55,22 +40,43 @@ export default function HotPlaces({ gu }: { gu: string }) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
-        {places.map((p) => (
-          <div
-            key={p.rank}
-            className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 hover:bg-white/20 transition-colors cursor-pointer"
-          >
-            <div className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3">
-              #{p.rank}
+        {places.map((p) => {
+          const title = p.name;
+          const { data: photo } = usePlacePhoto(title);
+
+          return (
+            <div
+              key={p.rank}
+              className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl overflow-hidden p-0 hover:bg-white/20 transition-colors cursor-pointer"
+            >
+              {/* 🔥 사진 영역 */}
+              {photo ? (
+                <img
+                  src={photo}
+                  alt={title}
+                  className="w-full h-40 object-cover"
+                />
+              ) : (
+                <div className="w-full h-40 bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
+                  <ImageIcon className="w-10 h-10 text-purple-400" />
+                </div>
+              )}
+
+              {/* 텍스트 영역 */}
+              <div className="p-4 sm:p-5 lg:p-6">
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3">
+                  #{p.rank}
+                </div>
+                <div className="text-base sm:text-lg font-semibold mb-1 sm:mb-2 line-clamp-1">
+                  {title}
+                </div>
+                <div className="text-xs sm:text-sm text-white/80 line-clamp-1">
+                  {p.tag}
+                </div>
+              </div>
             </div>
-            <div className="text-base sm:text-lg font-semibold mb-1 sm:mb-2 line-clamp-1">
-              {p.name}
-            </div>
-            <div className="text-xs sm:text-sm text-white/80 line-clamp-1">
-              {p.tag}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </>
   );
