@@ -3,40 +3,38 @@
 import { MapPin, Search, ChevronRight } from "lucide-react";
 import { guData } from "@/lib/gudata";
 import { useRouter } from "next/navigation";
+import { useAppStore } from "@/store/useAppStore";
 
 type SidebarProps = {
-  search: string;
-  setSearch: (v: string) => void;
-  selectedGu: (typeof guData)[number] | null;
-  setSelectedGu: (gu: (typeof guData)[number]) => void;
-  hoveredGu: string | null;
-  setHoveredGu: (id: string | null) => void;
   isMobile?: boolean;
-  isOpen?: boolean;
-  setIsOpen?: (v: boolean) => void;
 };
 
-export default function Sidebar({
-  search,
-  setSearch,
-  selectedGu,
-  setSelectedGu,
-  hoveredGu,
-  setHoveredGu,
-  isMobile = false,
-  isOpen = false,
-  setIsOpen = () => {},
-}: SidebarProps) {
+export default function Sidebar({ isMobile = false }: SidebarProps) {
   const router = useRouter();
 
-  const filteredGuData = guData.filter((gu) => {
-    const keyword = (search || "").toLowerCase();
-    return gu.name.toLowerCase().includes(keyword);
-  });
+  const {
+    search,
+    setSearch,
+    selectedGu,
+    setSelectedGu,
+    hoveredGu,
+    setHoveredGu,
+    isSidebarOpen,
+    setIsSidebarOpen,
+  } = useAppStore();
+
+  const isOpen = isMobile ? isSidebarOpen : true;
+  const setIsOpen = isMobile ? setIsSidebarOpen : () => {};
+
+  const filteredGuData = guData.filter((gu) =>
+    gu.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   const handleGuClick = (gu: (typeof guData)[number]) => {
     setSelectedGu(gu);
-    setIsOpen(false);
+    if (isMobile) {
+      setIsSidebarOpen(false);
+    }
   };
 
   return (

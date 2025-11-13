@@ -1,6 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { guData } from "@/lib/gudata";
+import React from "react";
 import ChatWidget from "@/components/main/ChatWidget";
 import Sidebar from "@/components/main/Sidebar";
 import Top from "@/components/main/Top";
@@ -11,31 +10,19 @@ import PlaceModal from "@/components/main/PlaceModal";
 import HotPlaces from "@/components/main/HotPlaces";
 import { useRecommendations } from "@/features/recommendations/queries/useRecommendations";
 import { useWeather } from "@/features/weather/queries/useWeather";
-
-export interface Recommendation {
-  placeId: string;
-  icon: string;
-  title: string;
-  desc: string;
-  time: string;
-  price?: string;
-}
+import { useAppStore } from "@/store/useAppStore";
 
 export default function Home() {
-  const [selectedGu, setSelectedGu] = useState<(typeof guData)[number] | null>(
-    null
-  );
-  const [hoveredGu, setHoveredGu] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<Recommendation | null>(null);
+  // ✅ Zustand에서 상태 가져오기
+  const { selectedGu, selectedItem, setSelectedItem } = useAppStore();
 
+  // React Query
   const { data: recommendations = [], isLoading } = useRecommendations(
     selectedGu?.id || ""
   );
   const { data: weather } = useWeather(selectedGu?.name || "");
 
-  const handleItemClick = (item: Recommendation) => {
+  const handleItemClick = (item: any) => {
     setSelectedItem(item);
   };
 
@@ -44,38 +31,14 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex overflow-x-hidden ">
+    <div className="min-h-screen bg-gray-50 flex overflow-x-hidden">
       <div className="hidden sm:block sm:w-72">
-        <Sidebar
-          search={search}
-          setSearch={setSearch}
-          selectedGu={selectedGu}
-          setSelectedGu={setSelectedGu}
-          hoveredGu={hoveredGu}
-          setHoveredGu={setHoveredGu}
-          isMobile={false}
-          isOpen={false}
-          setIsOpen={() => {}}
-        />
+        <Sidebar isMobile={false} />
       </div>
 
       <main className="flex-1 min-h-screen">
-        <Top
-          selectedGu={selectedGu}
-          isSidebarOpen={isSidebarOpen}
-          setIsSidebarOpen={setIsSidebarOpen}
-        />
-        <Sidebar
-          search={search}
-          setSearch={setSearch}
-          selectedGu={selectedGu}
-          setSelectedGu={setSelectedGu}
-          hoveredGu={hoveredGu}
-          setHoveredGu={setHoveredGu}
-          isMobile={true}
-          isOpen={isSidebarOpen}
-          setIsOpen={setIsSidebarOpen}
-        />
+        <Top />
+        <Sidebar isMobile={true} />
 
         {selectedGu ? (
           <div className="p-4 sm:p-8 lg:p-12 min-w-screen">

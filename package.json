@@ -34,7 +34,8 @@
     "react-simple-maps": "^3.0.0",
     "tailwindcss-animation-delay": "^2.0.2",
     "topojson-client": "^3.1.0",
-    "zod": "^3.25.76"
+    "zod": "^3.25.76",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@types/d3": "^7.4.3",
