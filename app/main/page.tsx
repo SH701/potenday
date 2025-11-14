@@ -13,10 +13,8 @@ import { useWeather } from "@/features/weather/queries/useWeather";
 import { useAppStore } from "@/store/useAppStore";
 
 export default function Home() {
-  // ✅ Zustand에서 상태 가져오기
   const { selectedGu, selectedItem, setSelectedItem } = useAppStore();
 
-  // React Query
   const { data: recommendations = [], isLoading } = useRecommendations(
     selectedGu?.id || ""
   );

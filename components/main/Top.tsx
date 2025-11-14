@@ -15,7 +15,7 @@ export default function Top() {
     if (confirm("AI를 변경하시겠습니까?")) {
       localStorage.removeItem("selectedPersona");
       document.cookie = "selectedPersona=; path=/; max-age=0";
-      router.push("/onboard");
+      router.push("/bot");
     }
   };
 

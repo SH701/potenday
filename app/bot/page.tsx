@@ -27,7 +27,7 @@ export default function Onboarding() {
             className={`rounded-2xl border-2 p-4 text-left transition hover:scale-105 ${
               selected === p.id
                 ? "border-purple-500 shadow-lg"
-                : "border-gray-200"
+                : "border-purple-300"
             }`}
           >
             <Image

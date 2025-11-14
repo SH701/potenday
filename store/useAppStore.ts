@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import { guData } from "@/lib/gudata";
 
 interface Recommendation {
@@ -25,18 +26,29 @@ interface AppState {
   setSelectedItem: (item: Recommendation | null) => void;
 }
 
-export const useAppStore = create<AppState>((set) => ({
-  selectedGu: null,
-  hoveredGu: null,
-  search: "",
-  isSidebarOpen: false,
-  selectedItem: null,
+export const useAppStore = create<AppState>()(
+  persist(
+    (set) => ({
+      selectedGu: null,
+      hoveredGu: null,
+      search: "",
+      isSidebarOpen: false,
+      selectedItem: null,
 
-  setSelectedGu: (gu) => set({ selectedGu: gu }),
-  setHoveredGu: (gu) => set({ hoveredGu: gu }),
-  setSearch: (value) => set({ search: value }),
-  setIsSidebarOpen: (isOpen) => set({ isSidebarOpen: isOpen }),
-  toggleSidebar: () =>
-    set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
-  setSelectedItem: (item) => set({ selectedItem: item }),
-}));
+      setSelectedGu: (gu) => set({ selectedGu: gu }),
+      setHoveredGu: (gu) => set({ hoveredGu: gu }),
+      setSearch: (value) => set({ search: value }),
+      setIsSidebarOpen: (isOpen) => set({ isSidebarOpen: isOpen }),
+      toggleSidebar: () =>
+        set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
+      setSelectedItem: (item) => set({ selectedItem: item }),
+    }),
+    {
+      name: "app-store",
+      partialize: (state) => ({
+        selectedGu: state.selectedGu,
+        selectedItem: state.selectedItem,
+      }),
+    }
+  )
+);
