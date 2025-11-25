@@ -3,25 +3,7 @@
 import { Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import RecommendationItem from "./RecommendationItem";
-
-interface Recommendation {
-  placeId: string;
-  icon: string;
-  title: string;
-  desc: string;
-  time: string;
-  price?: string;
-  address:string
-}
-
-interface RecommendationListProps {
-  recommendations: Recommendation[];
-  loading: boolean;
-  selectedGuId: string;
-  selectedGuColor: string;
-  guName: string;
-  onItemClick: (item: Recommendation) => void;
-}
+import { RecommendationListProps } from "@/types/recommandation";
 
 export default function RecommendationList({
   recommendations,

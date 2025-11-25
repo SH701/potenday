@@ -1,15 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { guData } from "@/lib/gudata";
-
-interface Recommendation {
-  placeId: string;
-  icon: string;
-  title: string;
-  desc: string;
-  time: string;
-  price?: string;
-}
+import { Recommendation } from "@/types/recommandation";
 
 interface AppState {
   selectedGu: (typeof guData)[number] | null;

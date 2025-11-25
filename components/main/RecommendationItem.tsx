@@ -1,6 +1,7 @@
 "use client";
 
 import { getTodayKey } from "@/lib/date";
+import { RecommendationItemProps } from "@/types/recommandation";
 import {
   Coffee,
   Camera,
@@ -19,19 +20,7 @@ const iconMap: Record<string, any> = {
   Star,
 };
 
-interface RecommendationItemProps {
-  item: {
-    placeId: string;
-    icon: string;
-    title: string;
-    desc: string;
-    time: string;
-    price?: string;
-    address: string;
-  };
-  color: string;
-  onClick: () => void;
-}
+
 
 export default function RecommendationItem({
   item,

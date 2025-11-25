@@ -1,28 +1,7 @@
 "use client";
 
-import { ArrowRight, Calendar, Clock, MapPin, X } from "lucide-react";
-
-interface Spot {
-  name: string;
-  desc: string;
-  address?: string;
-  arriveTime?: string;
-  stayTime?: string;
-  category?: string;
-  nextMove?: string;
-}
-interface Props {
-  title: string;
-  vibe: string | null | undefined;
-  route?: string | null | undefined;
-  spots: Spot[];
-}
-
-interface CourseModalProps {
-  course: Props | null;
-  onClose: () => void;
-  isOpen: boolean;
-}
+import { CourseModalProps, Spot } from "@/types/course";
+import { ArrowRight, Clock, MapPin, X } from "lucide-react";
 
 export default function CourseModal({
   course,

@@ -1,8 +1,9 @@
 "use client";
 
+import { Recommendation } from "@/types/recommandation";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, MapPin, Phone, ExternalLink, Clock } from "lucide-react";
-import { Recommendation } from "@/app/main/page";
+import { X, MapPin, ExternalLink, Clock } from "lucide-react";
+
 import { useEffect, useState } from "react";
 
 interface PlaceModalProps {

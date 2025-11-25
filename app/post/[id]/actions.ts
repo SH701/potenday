@@ -5,14 +5,12 @@ import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
-// 🔹 현재 로그인한 Clerk 사용자 ID 가져오기
 async function getCurrentUserId() {
   const { userId } = await auth();
   if (!userId) throw new Error("로그인이 필요합니다.");
   return userId;
 }
 
-// 🔹 게시물 상세 가져오기
 export async function getPostDetail(postId: number) {
   const post = await db.post.findUnique({
     where: { id: postId },
@@ -20,8 +18,8 @@ export async function getPostDetail(postId: number) {
       user: {
         select: {
           username: true,
-          nickname: true, // ✅ 추가
-          email: true, // ✅ 추가
+          nickname: true,
+          email: true,
           photo: true,
         },
       },
@@ -48,9 +46,8 @@ export async function getPostDetail(postId: number) {
   return { ...post, likeCount: post.Like.length };
 }
 
-// 🔹 댓글 작성
 export async function addComment(formData: FormData) {
-  const userId = await getCurrentUserId(); // ✅ await 추가!
+  const userId = await getCurrentUserId();
 
   const rawPostId = formData.get("postId");
   const commentText = formData.get("comment")?.toString().trim();
@@ -69,14 +66,13 @@ export async function addComment(formData: FormData) {
     data: {
       comment: commentText,
       postId,
-      userId, // ✅ 이제 string 타입
+      userId,
     },
   });
 
   revalidatePath(`/post/${postId}`);
 }
 
-// 🔹 댓글 목록 가져오기
 export async function getComments(postId: number) {
   const comments = await db.comment.findMany({
     where: { postId },
@@ -91,9 +87,8 @@ export async function getComments(postId: number) {
   return comments;
 }
 
-// 🔹 좋아요 추가
 export async function likePost(postId: number) {
-  const userId = await getCurrentUserId(); // ✅ await 추가!
+  const userId = await getCurrentUserId();
 
   const existing = await db.like.findFirst({
     where: { postId, userId },
@@ -109,9 +104,8 @@ export async function likePost(postId: number) {
   revalidatePath(`/post/${postId}`);
 }
 
-// 🔹 좋아요 취소
 export async function dislikePost(postId: number) {
-  const userId = await getCurrentUserId(); // ✅ await 추가!
+  const userId = await getCurrentUserId();
 
   const existing = await db.like.findFirst({
     where: { postId, userId },

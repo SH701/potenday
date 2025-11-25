@@ -88,7 +88,6 @@ export default function ChatWidget() {
         <MessageCircle className="w-7 h-7 sm:w-8 sm:h-8" />
       </button>
 
-      {/* 모바일 전체화면 오버레이 */}
       {isOpen && (
         <div
           className="fixed inset-0 z-40 sm:hidden"
@@ -99,7 +98,6 @@ export default function ChatWidget() {
       {/* 채팅창 */}
       {isOpen && (
         <div className="fixed bottom-24 right-4 left-4 h-[65vh] sm:inset-auto sm:bottom-32 sm:right-16 sm:w-[400px] sm:h-[600px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col z-50">
-          {/* 헤더 */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12  rounded-xl flex items-center justify-center">
@@ -152,7 +150,6 @@ export default function ChatWidget() {
                   m.role === "user" ? "ml-auto" : "mr-auto"
                 }`}
               >
-                {/* 텍스트 메시지 */}
                 <div
                   className={`px-3 py-2 rounded-xl text-sm sm:text-[15px]
                     break-words break-all whitespace-pre-line leading-relaxed
