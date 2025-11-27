@@ -5,7 +5,8 @@ import BackButton from "@/components/ui/button/BackButton";
 import CourseCard from "@/components/course/CoureseCard";
 import StarDelete from "@/components/ui/button/StarDelete";
 import Move from "@/components/ui/button/MoveNaver";
-import { Course } from "@prisma/client";
+
+import { Course } from "@/types/prisma";
 
 export default async function Me() {
   const user = await currentUser();
