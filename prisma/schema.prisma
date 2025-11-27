@@ -8,79 +8,79 @@ datasource db {
 }
 
 model User {
-  clerkId   String    @id
-  photo     String?
-  username  String? 
-  nickname  String?  
-  email String?
+  clerkId    String    @id
+  photo      String?
+  username   String?
+  nickname   String?
+  email      String?
   created_at DateTime  @default(now())
-  updated_at DateTime   @default(now()) @updatedAt
-  posts     Post[]
-  comments  Comment[]
-  likes Like[]
-stars Star[]
-courses Course[]
+  updated_at DateTime  @default(now()) @updatedAt
+  comments   Comment[]
+  courses    Course[]
+  likes      Like[]
+  posts      Post[]
+  stars      Star[]
 }
 
 model Post {
-  id          Int       @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   post       String
-  photo       String?
-  created_at  DateTime  @default(now())
-  updated_at  DateTime   @default(now()) @updatedAt
-  user        User      @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
-  userId      String    
-  comments    Comment[]
-  Like Like[]
+  photo      String?
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now()) @updatedAt
+  userId     String
+  comments   Comment[]
+  Like       Like[]
+  user       User      @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
 }
 
 model Comment {
   id         Int      @id @default(autoincrement())
   comment    String?
   created_at DateTime @default(now())
-  updated_at DateTime  @default(now()) @updatedAt
-  user       User     @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
-  userId     String  
-  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  updated_at DateTime @default(now()) @updatedAt
+  userId     String
   postId     Int
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
 }
 
 model Like {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
-  userId    String
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId    Int
+  id         Int      @id @default(autoincrement())
+  userId     String
+  postId     Int
   created_at DateTime @default(now())
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
 
   @@unique([userId, postId])
 }
 
-
 model Star {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
-  userId    String
-  placeId   String   
-  title     String
-  desc      String?
-  icon      String?  
-  time      String?
-  price     String?
-  address String?
+  id         Int      @id @default(autoincrement())
+  userId     String
+  placeId    String
+  title      String
+  desc       String?
+  icon       String?
+  time       String?
+  price      String?
+  address    String?
   created_at DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
 
-  @@unique([userId, placeId]) 
+  @@unique([userId, placeId])
 }
+
 model Course {
-  id String @id @default(cuid())
-  userId String
-  personaId String?
-  title String
-  vibe String?
-  route String?
-  totalDuration  String?
-  spots Json
-  created_at DateTime   @default(now())
-  user      User?     @relation(fields: [userId], references: [clerkId])
+  id            String   @id @default(cuid())
+  userId        String
+  personaId     String?
+  title         String
+  vibe          String?
+  route         String?
+  totalDuration String?
+  spots         Json
+  created_at    DateTime @default(now())
+  user          User     @relation(fields: [userId], references: [clerkId])
 }
