@@ -8,20 +8,23 @@ import { useEffect } from "react";
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js");
     }
   }, []);
+
   return (
     <ClerkProvider>
       <html lang="ko">
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#ffffff" />
-        <body className={` antialiased `}>
+        <head>
+          <link rel="manifest" href="/manifest.json" />
+          <meta name="theme-color" content="#ffffff" />
+        </head>
+        <body className="antialiased">
           <Providers>
             <SignedIn>
               <SyncUser />
