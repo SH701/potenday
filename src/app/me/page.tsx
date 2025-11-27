@@ -6,11 +6,11 @@ import CourseCard from "@/components/course/CoureseCard";
 import StarDelete from "@/components/ui/button/StarDelete";
 import Move from "@/components/ui/button/MoveNaver";
 
-import { Course } from "@/types/prisma";
+import { Course, Stars } from "@/types/prisma";
 
 export default async function Me() {
   const user = await currentUser();
-  const stars = await db.star.findMany({
+  const stars: Stars[] = await db.star.findMany({
     where: { userId: user?.id },
     orderBy: { created_at: "desc" },
   });

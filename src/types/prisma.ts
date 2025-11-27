@@ -35,7 +35,7 @@ export type Like = {
   created_at: Date;
 };
 
-export type Star = {
+export type Stars = {
   id: number;
   userId: string;
   placeId: string;
