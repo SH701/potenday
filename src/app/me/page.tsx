@@ -1,4 +1,4 @@
-import db from "@/lib/db";
+import { db } from "@/lib/db";
 import { Star, FolderHeart, Route } from "lucide-react";
 import { currentUser } from "@clerk/nextjs/server";
 import BackButton from "@/components/ui/button/BackButton";
