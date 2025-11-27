@@ -26,7 +26,7 @@ export default function GenerateCourseModal({
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState<any | null>(null);
-  const [time, setTime] = useState("");
+
   const [saving, setSaving] = useState(false);
   const router = useRouter();
 
@@ -56,7 +56,7 @@ export default function GenerateCourseModal({
         body: JSON.stringify({
           message,
           location: location.trim() || "",
-          time: time.trim() || "오후 3시",
+
           personaId: "ruby",
         }),
       });

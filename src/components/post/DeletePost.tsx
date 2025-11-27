@@ -6,7 +6,7 @@ import { useUser } from "@clerk/nextjs";
 
 interface Props {
   postId: number;
-  authorId: string; // 작성자 Clerk ID
+  authorId: string;
 }
 
 export default function DeletePost({ postId, authorId }: Props) {

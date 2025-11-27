@@ -3,7 +3,7 @@
 import { MapPin, Clock, AlertCircle, ImageIcon } from "lucide-react";
 import { guData } from "@/data/gudata";
 import { useRouter } from "next/navigation";
-import BackButton from "@/components/etc/BackButton";
+import BackButton from "@/components/ui/button/BackButton";
 import { Key, useState } from "react";
 import { useGuRecommendations } from "@/features/gu/queries/useGuRecommendations";
 import { usePlacePhoto } from "@/features/gu/queries/usePlacePhoto";

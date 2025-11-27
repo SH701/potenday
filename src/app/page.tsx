@@ -14,7 +14,7 @@ export default function Page() {
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-[40%] left-[-10%] sm:top-60 sm:left-10 w-[300px] sm:w-[400px] lg:w-[480px] opacity-30 blur-sm animate-blob">
           <Image
-            src="/namsan.png"
+            src="/login/namsan.png"
             alt="남산"
             width={480}
             height={480}
@@ -23,7 +23,7 @@ export default function Page() {
         </div>
         <div className="absolute top-10 right-0 sm:top-20 sm:right-20 w-[250px] sm:w-[400px] lg:w-[480px] opacity-30 blur-sm animate-blob animation-delay-2000">
           <Image
-            src="/palace.png"
+            src="/login/palace.png"
             alt="궁"
             width={480}
             height={480}
@@ -32,7 +32,7 @@ export default function Page() {
         </div>
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[250px] sm:w-[400px] lg:w-[480px] opacity-30 blur-sm animate-blob animation-delay-1000">
           <Image
-            src="/ddp.png"
+            src="/login/ddp.png"
             alt="DDP"
             width={480}
             height={480}

@@ -24,21 +24,21 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "img.clerk.com", 
+        hostname: "img.clerk.com",
         pathname: "/**",
       },
       {
         protocol: "https",
-        hostname: "maps.googleapis.com", 
+        hostname: "maps.googleapis.com",
         pathname: "/maps/api/place/photo",
       },
       {
         protocol: "https",
-        hostname: "images.unsplash.com", 
+        hostname: "images.unsplash.com",
         pathname: "/**",
       },
     ],
   },
 };
 
-module.exports = nextConfig;
+module.exports = withPWA(nextConfig);

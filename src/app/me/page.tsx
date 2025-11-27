@@ -1,10 +1,10 @@
 import db from "@/lib/db";
 import { Star, FolderHeart, Route } from "lucide-react";
 import { currentUser } from "@clerk/nextjs/server";
-import BackButton from "@/components/etc/BackButton";
+import BackButton from "@/components/ui/button/BackButton";
 import CourseCard from "@/components/course/CoureseCard";
-import StarDelete from "@/components/etc/StarDelete";
-import Move from "@/components/etc/Move";
+import StarDelete from "@/components/ui/button/StarDelete";
+import Move from "@/components/ui/button/MoveNaver";
 
 export default async function Me() {
   const user = await currentUser();

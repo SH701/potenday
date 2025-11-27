@@ -2,7 +2,7 @@
 
 import { writePost } from "@/app/post/actions";
 import { useFormState } from "react-dom";
-import AddButton from "../etc/AddButton";
+import AddButton from "../ui/button/AddButton";
 
 export default function AddPost() {
   const [state, action] = useFormState(writePost, { success: false });
