@@ -5,6 +5,7 @@ import BackButton from "@/components/ui/button/BackButton";
 import CourseCard from "@/components/course/CoureseCard";
 import StarDelete from "@/components/ui/button/StarDelete";
 import Move from "@/components/ui/button/MoveNaver";
+import { Course } from "@prisma/client";
 
 export default async function Me() {
   const user = await currentUser();
@@ -12,7 +13,7 @@ export default async function Me() {
     where: { userId: user?.id },
     orderBy: { createdAt: "desc" },
   });
-  const courses = await db.course.findMany({
+  const courses: Course[] = await db.course.findMany({
     where: { userId: user?.id },
     orderBy: { createdAt: "desc" },
   });
