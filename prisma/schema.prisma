@@ -13,14 +13,13 @@ model User {
   username  String? 
   nickname  String?  
   email String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
   posts     Post[]
   comments  Comment[]
-  Like Like[]
-  Star Star[]
-
-  Course Course[]
+  likes Like[]
+stars Star[]
+courses Course[]
 }
 
 model Post {
@@ -52,7 +51,7 @@ model Like {
   userId    String
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int
-  createdAt DateTime @default(now())
+  created_at DateTime @default(now())
 
   @@unique([userId, postId])
 }
@@ -69,7 +68,7 @@ model Star {
   time      String?
   price     String?
   address String?
-  createdAt DateTime @default(now())
+  created_at DateTime @default(now())
 
   @@unique([userId, placeId]) 
 }
@@ -82,6 +81,6 @@ model Course {
   route String?
   totalDuration  String?
   spots Json
-  createdAt DateTime   @default(now())
+  created_at DateTime   @default(now())
   user      User?     @relation(fields: [userId], references: [clerkId])
 }

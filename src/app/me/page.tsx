@@ -11,11 +11,11 @@ export default async function Me() {
   const user = await currentUser();
   const stars = await db.star.findMany({
     where: { userId: user?.id },
-    orderBy: { createdAt: "desc" },
+    orderBy: { created_at: "desc" },
   });
   const courses: Course[] = await db.course.findMany({
     where: { userId: user?.id },
-    orderBy: { createdAt: "desc" },
+    orderBy: { created_at: "desc" },
   });
 
   const isEmpty = stars.length === 0 && courses.length === 0;

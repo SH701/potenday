@@ -11,7 +11,7 @@ interface CourseCardProps {
     title: string;
     vibe: string | null;
     spots: any;
-    createdAt: Date;
+    created_at: Date;
     route: string | null | undefined;
   };
 }
