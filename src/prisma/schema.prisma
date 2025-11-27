@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  clerkId   String    @id
+  photo     String?
+  username  String? 
+  nickname  String?  
+  email String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  posts     Post[]
+  comments  Comment[]
+  Like Like[]
+  Star Star[]
+
+  Course Course[]
+}
+
+model Post {
+  id          Int       @id @default(autoincrement())
+  post       String
+  photo       String?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
+  userId      String    
+  comments    Comment[]
+  Like Like[]
+}
+
+model Comment {
+  id         Int      @id @default(autoincrement())
+  comment    String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
+  userId     String  
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId     Int
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
+  userId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+}
+
+
+model Star {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
+  userId    String
+  placeId   String   
+  title     String
+  desc      String?
+  icon      String?  
+  time      String?
+  price     String?
+  address String?
+  createdAt DateTime @default(now())
+
+  @@unique([userId, placeId]) 
+}
+model Course {
+  id String @id @default(cuid())
+  userId String
+  personaId String?
+  title String
+  vibe String?
+  route String?
+  totalDuration  String?
+  spots Json
+  createdAt DateTime   @default(now())
+  user      User?     @relation(fields: [userId], references: [clerkId])
+}
