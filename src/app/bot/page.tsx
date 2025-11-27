@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { personas } from "@/lib/persona";
+import { personas } from "@/data/persona";
 import { useRouter } from "next/navigation";
 
 export default function Onboarding() {

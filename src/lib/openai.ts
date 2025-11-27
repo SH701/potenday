@@ -1,29 +1,12 @@
+import {
+  NaverPlace,
+  PlaceInfo,
+  Recommendation,
+  RecommendationResponse,
+} from "@/types/ai";
 import OpenAI from "openai";
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-interface NaverPlace {
-  title: string;
-  address: string;
-  category: string;
-}
-
-interface PlaceInfo {
-  name: string;
-  address: string;
-  category: string;
-}
-
-interface Recommendation {
-  icon: string;
-  title: string;
-  desc: string;
-  time: string;
-}
-
-interface RecommendationResponse {
-  recommendations: Recommendation[];
-}
 
 async function searchRealPlaces(
   gu: string,

@@ -7,7 +7,7 @@ interface Props {
   className?: string;
 }
 
-export default function Button({ text, className }: Props) {
+export default function AddButton({ text, className }: Props) {
   const { pending } = useFormStatus();
   return (
     <button

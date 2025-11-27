@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { guData } from "@/lib/gudata";
+import { guData } from "@/data/gudata";
 import { searchNaverPlaces } from "@/lib/naver";
 
 interface NaverPlace {

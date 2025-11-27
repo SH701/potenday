@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { guData } from "@/lib/gudata";
+import { guData } from "@/data/gudata";
 import { Recommendation } from "@/types/recommandation";
 
 interface AppState {

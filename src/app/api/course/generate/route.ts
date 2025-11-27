@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { auth } from "@clerk/nextjs/server";
-import { famousgu } from "@/lib/gudata";
+import { famousgu } from "@/data/gudata";
 import { cookies } from "next/headers";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });

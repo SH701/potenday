@@ -1,5 +1,3 @@
-import { title } from "process";
-
 export async function searchNaverPlaces(keyword: string) {
   const res = await fetch(
     `https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(

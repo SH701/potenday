@@ -2,8 +2,7 @@
 
 import { writePost } from "@/app/post/actions";
 import { useFormState } from "react-dom";
-import { PhotoIcon } from "@heroicons/react/24/outline";
-import Button from "../etc/Button";
+import AddButton from "../etc/AddButton";
 
 export default function AddPost() {
   const [state, action] = useFormState(writePost, { success: false });
@@ -17,12 +16,7 @@ export default function AddPost() {
 
       {state?.error && <p className="text-red-500 text-sm">{state.error}</p>}
       <div className="flex justify-center gap-5">
-        {/* <label className=" flex gap-2 items-center justify-center cursor-pointer  p-2 bg-gray-100 rounded hover:bg-gray-200">
-          <PhotoIcon className="size-7  -rotate-30" />
-          <span className="font-semibold">사진 추가</span>
-          <input type="file" name="photo" accept="image/*" className="hidden" />
-        </label> */}
-        <Button
+        <AddButton
           text="작성하기"
           className=" w-[100px] bg-purple-500 hover:bg-purple-600 text-white font-medium border-none py-1
     rounded-md text-center  transition-colors cursor-pointer disabled:cursor-not-allowed"

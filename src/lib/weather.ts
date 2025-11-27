@@ -1,4 +1,4 @@
-import { guData } from "@/lib/gudata";
+import { guData } from "@/data/gudata";
 
 interface WeatherResponse {
   coord: { lon: number; lat: number };
