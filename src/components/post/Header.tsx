@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+
 import { UserButton } from "@clerk/nextjs";
 import { House } from "lucide-react";
 

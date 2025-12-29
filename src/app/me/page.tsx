@@ -1,19 +1,15 @@
 import { db } from "@/lib/db";
 import { Star, FolderHeart, Route } from "lucide-react";
 import { currentUser } from "@clerk/nextjs/server";
-<<<<<<< HEAD
-import BackButton from "@/components/ui/button/BackButton";
-import CourseCard from "@/components/course/CoureseCard";
-import StarDelete from "@/components/ui/button/StarDelete";
-import Move from "@/components/ui/button/MoveNaver";
+
 
 import { Course, Stars } from "@/types/prisma";
-=======
-import BackButton from "@/src/components/etc/BackButton";
-import CourseCard from "@/src/components/course/CoureseCard";
-import StarDelete from "@/src/components/etc/StarDelete";
-import Move from "@/src/components/etc/Move";
->>>>>>> 55c74ae (Refactor: 폴더 구조 정리)
+
+import BackButton from "@/components/etc/BackButton";
+import CourseCard from "@/components/course/CoureseCard";
+import StarDelete from "@/components/etc/StarDelete";
+import Move from "@/components/etc/Move";
+
 
 export default async function Me() {
   const user = await currentUser();

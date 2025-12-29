@@ -1,6 +1,8 @@
-import { NextResponse } from "next/server";
 import { guData } from "@/data/gudata";
 import { searchNaverPlaces } from "@/lib/naver";
+import { NextResponse } from "next/server";
+
+
 
 interface NaverPlace {
   title: string;

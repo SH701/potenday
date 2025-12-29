@@ -2,12 +2,8 @@
 
 import { writePost } from "@/app/post/actions";
 import { useFormState } from "react-dom";
-<<<<<<< HEAD
-import AddButton from "../ui/button/AddButton";
-=======
-import { PhotoIcon } from "@heroicons/react/24/outline";
-import Button from "../../src/etc/Button";
->>>>>>> 55c74ae (Refactor: 폴더 구조 정리)
+import AddButton from "../etc/Button";
+
 
 export default function AddPost() {
   const [state, action] = useFormState(writePost, { success: false });

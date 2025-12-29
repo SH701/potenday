@@ -1,9 +1,11 @@
 "use client";
 
 import { MapPin, Search, ChevronRight } from "lucide-react";
+
 import { guData } from "@/data/gudata";
 import { useRouter } from "next/navigation";
 import { useAppStore } from "@/store/useAppStore";
+
 
 type SidebarProps = {
   isMobile?: boolean;

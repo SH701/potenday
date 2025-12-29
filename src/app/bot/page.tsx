@@ -1,8 +1,9 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { personas } from "@/data/persona";
+
 import { useRouter } from "next/navigation";
+import { personas } from "@/lib/persona";
 
 export default function Onboarding() {
   const [selected, setSelected] = useState<string | null>(null);

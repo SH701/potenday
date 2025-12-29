@@ -1,4 +1,4 @@
-import { Weather } from "@/lib/weather";
+import { Weather } from "@/lib";
 import { NextResponse } from "next/server";
 
 export async function GET(

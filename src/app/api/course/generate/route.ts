@@ -4,6 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { famousgu } from "@/data/gudata";
 import { cookies } from "next/headers";
 
+
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const MAX_GUEST = 3;
 
@@ -51,7 +52,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "message required" }, { status: 400 });
 
     // 익명 쿼터 체크
-    const rawCount = cookieStore.get("guest_created_count")?.value;
+    const rawCount = (await cookieStore).get("guest_created_count")?.value;
     const count = rawCount ? parseInt(rawCount, 10) : 0;
     if (!userId && count >= MAX_GUEST) {
       return NextResponse.json(

@@ -3,7 +3,9 @@
 import { Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import RecommendationItem from "./RecommendationItem";
+
 import { RecommendationListProps } from "@/types/recommandation";
+
 
 export default function RecommendationList({
   recommendations,

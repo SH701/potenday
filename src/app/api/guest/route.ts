@@ -9,7 +9,7 @@ export async function GET() {
     const { userId } = await auth();
     if (userId) return NextResponse.json({ guestRemaining: null });
 
-    const raw = cookies().get("guest_created_count")?.value;
+    const raw = (await cookies()).get("guest_created_count")?.value;
     const count = raw ? parseInt(raw, 10) : 0;
     return NextResponse.json({
       guestRemaining: Math.max(0, MAX_GUEST - count),

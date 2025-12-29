@@ -3,7 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { MessageCircle, ArrowUp } from "lucide-react";
 import Image from "next/image";
-import { personas } from "@/data/persona";
+
+import { personas } from "@/lib/persona";
+
 
 interface Message {
   role: "user" | "ai";

@@ -1,9 +1,15 @@
 "use client";
 
 import { MapPin, Clock, AlertCircle, ImageIcon } from "lucide-react";
+<<<<<<< HEAD
 import { guData } from "@/data/gudata";
 import { useRouter } from "next/navigation";
 import BackButton from "@/components/ui/button/BackButton";
+=======
+import { guData } from "@/data";
+import { useRouter } from "next/navigation";
+import BackButton from "@/components/etc/BackButton";
+>>>>>>> 4c29ec1 (Chore: import 정리)
 import { Key, useState } from "react";
 import { useGuRecommendations } from "@/features/gu/queries/useGuRecommendations";
 import { usePlacePhoto } from "@/features/gu/queries/usePlacePhoto";

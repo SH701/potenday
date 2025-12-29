@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
 import { guData } from "@/data/gudata";
 import { generateGuRecommendations } from "@/lib/openai";
+import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
