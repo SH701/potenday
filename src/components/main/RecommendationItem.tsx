@@ -1,7 +1,7 @@
 "use client";
 
 import { getTodayKey } from "@/lib/date";
-import { RecommendationItemProps } from "@/types/recommandation";
+import { RecommendationItemProps } from "@/src/types/recommandation";
 import {
   Coffee,
   Camera,
@@ -19,8 +19,6 @@ const iconMap: Record<string, any> = {
   Camera,
   Star,
 };
-
-
 
 export default function RecommendationItem({
   item,
