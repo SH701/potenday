@@ -3,8 +3,8 @@ import { BookOpenText, Menu, Bot, MapPinPlus } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import GenerateCourseModal from "@/src/components/course/GenerateCourse";
-import { useAppStore } from "@/src/store/useAppStore";
+import GenerateCourseModal from "@/components/course/GenerateCourse";
+import { useAppStore } from "@/store/useAppStore";
 
 export default function Top() {
   const router = useRouter();

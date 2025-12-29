@@ -1,16 +1,16 @@
 "use client";
 import React from "react";
-import ChatWidget from "@/src/components/main/ChatWidget";
-import Sidebar from "@/src/components/main/Sidebar";
-import Top from "@/src/components/main/Top";
-import StatsCards from "@/src/components/main/StatsCards";
-import RecommendationList from "@/src/components/main/RecommendationList";
-import EmptyState from "@/src/components/main/EmptyState";
-import PlaceModal from "@/src/components/main/PlaceModal";
-import HotPlaces from "@/src/components/main/HotPlaces";
+import ChatWidget from "@/components/main/ChatWidget";
+import Sidebar from "@/components/main/Sidebar";
+import Top from "@/components/main/Top";
+import StatsCards from "@/components/main/StatsCards";
+import RecommendationList from "@/components/main/RecommendationList";
+import EmptyState from "@/components/main/EmptyState";
+import PlaceModal from "@/components/main/PlaceModal";
+import HotPlaces from "@/components/main/HotPlaces";
 import { useRecommendations } from "@/features/recommendations/queries/useRecommendations";
 import { useWeather } from "@/features/weather/queries/useWeather";
-import { useAppStore } from "@/src/store/useAppStore";
+import { useAppStore } from "@/store/useAppStore";
 
 export default function Home() {
   const { selectedGu, selectedItem, setSelectedItem } = useAppStore();

@@ -1,7 +1,7 @@
 "use client";
 
 import { getTodayKey } from "@/lib/date";
-import { RecommendationItemProps } from "@/src/types/recommandation";
+import { RecommendationItemProps } from "@/types/recommandation";
 import {
   Coffee,
   Camera,

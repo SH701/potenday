@@ -1,6 +1,6 @@
 "use client";
 
-import { CourseModalProps, Spot } from "@/src/types/course";
+import { CourseModalProps, Spot } from "@/types/course";
 import { ArrowRight, Clock, MapPin, X } from "lucide-react";
 
 export default function CourseModal({
